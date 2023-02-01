@@ -1,26 +1,13 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-  // Further reading:
-  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
-model Example {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-// Necessary for Next auth
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -34,8 +21,9 @@ model Account {
   scope             String?
   id_token          String? // @db.Text
   session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [user_id], onDelete: Cascade)
 
+  @@index([userId])
   @@unique([provider, providerAccountId])
 }
 
@@ -44,17 +32,29 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [user_id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
-  id            String    @id @default(cuid())
+  user_id       String    @id @default(cuid())
+  username      String    @unique
   name          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  bio           String?
+  role          String    @default("USER")
+  interests     UserTag[]
   accounts      Account[]
   sessions      Session[]
+  logs          Log[]
+  posts         Post[]
+  comments      Comment[]
+  likes         Like[]
+  followers     Follow[]  @relation("followed_user")
+  following     Follow[]  @relation("following_user")
 }
 
 model VerificationToken {
@@ -63,4 +63,111 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Log {
+  log_id      String  @id @default(cuid())
+  user_id     String
+  title       String
+  description String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt 
+  user        User     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  log_tags    LogTag[]
+  comments    Comment[]
+  likes       Like[]
+
+  @@index([user_id])
+}
+
+model Post {
+  post_id     String  @id @default(cuid())
+  user_id     String
+  title       String
+  body        String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  user        User     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  comments    Comment[]
+  likes       Like[]
+
+  @@index([user_id])
+}
+
+model Comment {
+  comment_id  String   @id @default(cuid())
+  user_id     String
+  log_id      String
+  post_id     String
+  body        String
+  created_at  DateTime @default(now())
+  user        User     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  log         Log      @relation(fields: [log_id], references: [log_id], onDelete: Cascade)
+  post        Post     @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([log_id])
+  @@index([post_id])
+}
+
+model Like {
+  like_id     String   @id @default(cuid())
+  user_id     String
+  log_id      String
+  post_id     String
+  created_at  DateTime @default(now())
+  user        User     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  log         Log      @relation(fields: [log_id], references: [log_id], onDelete: Cascade)
+  post        Post     @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([log_id])
+  @@index([post_id])
+}
+
+model Follow {
+  followed_user_id  String
+  following_user_id String
+  created_at        DateTime @default(now())
+  followed_user     User     @relation("followed_user", fields: [followed_user_id], references: [user_id], onDelete: Cascade)
+  following_user    User     @relation("following_user", fields: [following_user_id], references: [user_id], onDelete: Cascade)
+
+  @@index([followed_user_id])
+  @@index([following_user_id])
+
+  // composite primary key
+  @@id([followed_user_id, following_user_id])
+}
+
+model Tag {
+  tag_id      String  @id @default(cuid())
+  tag_name    String
+  user_tags   UserTag[]
+  log_tags    LogTag[]
+}
+
+model LogTag {
+  tag_id     String
+  log_id     String
+  tag        Tag     @relation(fields: [tag_id], references: [tag_id], onDelete: Cascade)
+  log        Log     @relation(fields: [log_id], references: [log_id], onDelete: Cascade)
+
+  @@index([tag_id])
+  @@index([log_id])
+
+  // composite primary key
+  @@id([log_id, tag_id])
+}
+
+model UserTag {
+  tag_id      String
+  user_id     String
+  tag         Tag     @relation(fields: [tag_id], references: [tag_id], onDelete: Cascade)
+  user        User    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@index([tag_id])
+  @@index([user_id])
+
+  // composite primary key
+  @@id([user_id, tag_id])
 }
