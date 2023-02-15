@@ -8,20 +8,25 @@ datasource db {
   relationMode = "prisma"
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? // @db.Text
-  access_token      String? // @db.Text
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? // @db.Text
+  id_token          String? @db.Text
   session_state     String?
-  user              User    @relation(fields: [userId], references: [user_id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@unique([provider, providerAccountId])
@@ -32,27 +37,27 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [user_id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
 
 model User {
-  user_id       String    @id @default(cuid())
-  username      String    @unique
+  id            String    @id @default(cuid())
+  username      String?   @unique
   name          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
   bio           String?
-  role          String    @default("USER")
+  role          Role    @default(USER)
   interests     UserTag[]
   accounts      Account[]
   sessions      Session[]
   logs          Log[]
   posts         Post[]
   comments      Comment[]
-  likes         Like[]
+  likes         Like[] 
   followers     Follow[]  @relation("followed_user")
   following     Follow[]  @relation("following_user")
 }
@@ -72,7 +77,7 @@ model Log {
   description String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt 
-  user        User     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   log_tags    LogTag[]
   comments    Comment[]
   likes       Like[]
@@ -87,7 +92,7 @@ model Post {
   body        String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
-  user        User     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   comments    Comment[]
   likes       Like[]
 
@@ -101,7 +106,7 @@ model Comment {
   post_id     String
   body        String
   created_at  DateTime @default(now())
-  user        User     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   log         Log      @relation(fields: [log_id], references: [log_id], onDelete: Cascade)
   post        Post     @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
 
@@ -116,7 +121,7 @@ model Like {
   log_id      String
   post_id     String
   created_at  DateTime @default(now())
-  user        User     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   log         Log      @relation(fields: [log_id], references: [log_id], onDelete: Cascade)
   post        Post     @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
 
@@ -129,8 +134,8 @@ model Follow {
   followed_user_id  String
   following_user_id String
   created_at        DateTime @default(now())
-  followed_user     User     @relation("followed_user", fields: [followed_user_id], references: [user_id], onDelete: Cascade)
-  following_user    User     @relation("following_user", fields: [following_user_id], references: [user_id], onDelete: Cascade)
+  followed_user     User     @relation("followed_user", fields: [followed_user_id], references: [id], onDelete: Cascade)
+  following_user    User     @relation("following_user", fields: [following_user_id], references: [id], onDelete: Cascade)
 
   @@index([followed_user_id])
   @@index([following_user_id])
@@ -163,7 +168,7 @@ model UserTag {
   tag_id      String
   user_id     String
   tag         Tag     @relation(fields: [tag_id], references: [tag_id], onDelete: Cascade)
-  user        User    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  user        User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@index([tag_id])
   @@index([user_id])

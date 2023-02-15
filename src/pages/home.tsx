@@ -1,7 +1,7 @@
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useSession, signOut } from "next-auth/react";
 
-const LandingPage = () => {
+const Home = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -9,20 +9,22 @@ const LandingPage = () => {
     return <main>Loading...</main>;
   }
 
+  if (!session) {
+    router.push("/");
+  }
+
   return (
     <main>
-      <h1 className="text-4xl">This is the basic landing page</h1>
-      {!session && (
+      <h1 className="text-4xl">This is the logged in homepage</h1>
       <button
         onClick={() => {
-          router.push("/auth/login");
+          signOut();
         }}
       >
-        Login
+        Sign Out
       </button>
-      )}
     </main>
   );
 };
 
-export default LandingPage;
+export default Home;
