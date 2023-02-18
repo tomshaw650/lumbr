@@ -14,7 +14,7 @@ const LandingPage = () => {
     <div>
       <nav className="navbar flex">
         <div className="flex-none">
-          <button className="btn-ghost btn-square btn">Logo</button>
+          <button className="dbtn btn-ghost btn-circle ml-10">Logo</button>
         </div>
         <ul className="ml-20 flex-1">
           <li className="btn-ghost btn text-lg normal-case">what is lumbr?</li>
@@ -33,8 +33,8 @@ const LandingPage = () => {
           )}
         </div>
       </nav>
-      <section className="grid grid-cols-1 grid-rows-2 place-content-center place-items-end md:grid-cols-2">
-        <div className="md:row-span-auto row-span-2 mt-10 place-self-center p-10">
+      <section className="grid w-full grid-cols-1 grid-rows-2 place-content-center place-items-end md:grid-cols-2">
+        <div className="md:row-span-auto row-span-2 mx-auto mt-10 ml-10 place-self-center p-10">
           <h1 className="mb-4 text-5xl font-bold md:text-6xl">
             A place to connect.
           </h1>

@@ -27,42 +27,86 @@ const NewUser: NextPage = () => {
   }, []);
 
   // loading state until user is loaded
+  // checking user as its important to fill out the form
   if (user.isLoading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <Formik
-      initialValues={{ name: user.data?.name, username: "", interests: [] }}
-      onSubmit={async (values: any, { setSubmitting }) => {
-        setSubmitting(false);
-        await update.mutateAsync({
-          name: values.name,
-          username: values.username,
-          interests: values.interests,
-        });
-        if (update.error) {
-          console.log(update.error);
-        } else {
-          router.push("/home");
-        }
-      }}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <Field name="name" type="text" placeholder="Name" />
-          <Field name="username" type="text" placeholder="Username" />
-          <Field name="interests" as="select" multiple>
-            {tags.data?.map((tag) => (
-              <option key={tag.tag_id} value={tag.tag_id}>{tag.tag_name}</option>
-            ))}
-          </Field>
-          <button type="submit" disabled={isSubmitting}>
-            Submit
-          </button>
-        </Form>
-      )}
-    </Formik>
+    <div className="flex h-screen w-screen">
+      <Formik
+        initialValues={{ name: user.data?.name, username: "", interests: [] }}
+        onSubmit={async (values: any, { setSubmitting }) => {
+          setSubmitting(false);
+          const interests = values.interests.map((tag: String) => ({
+            user_id: user.data?.id,
+            tag_id: tag,
+          }));
+
+          console.log(interests);
+          await update.mutateAsync({
+            name: values.name,
+            username: values.username,
+            interests: interests,
+          });
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form className="flex items-center rounded-lg border-gray-300 p-4">
+            <div className="form-control flex w-full max-w-xs flex-col">
+              <label className="label" htmlFor="name">
+                <span className="label-text">What is your name?</span>
+              </label>
+              <Field
+                name="name"
+                type="text"
+                placeholder="Name"
+                className="input-bordered input mb-4 bg-white"
+              />
+              <label className="label" htmlFor="username">
+                <span className="label-text">Please enter a username</span>
+                <span
+                  className="label-text-alt tooltip tooltip-primary text-lg"
+                  data-tip="Username must be between 2-20 characters and contain no whitespace."
+                >
+                  (?)
+                </span>
+              </label>
+              <Field
+                name="username"
+                type="text"
+                placeholder="Username"
+                className="input-bordered input mb-4 bg-white"
+              />
+              <label className="label" htmlFor="interests">
+                <span className="label-text">
+                  What are your developer interests?
+                </span>
+              </label>
+              <Field
+                name="interests"
+                as="select"
+                multiple
+                className="select-bordered select mb-4 bg-white pt-2 text-lg"
+              >
+                {tags.data?.map((tag) => (
+                  <option key={tag.tag_id} value={tag.tag_id}>
+                    {tag.tag_name}
+                  </option>
+                ))}
+              </Field>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn-primary btn text-white"
+              >
+                Submit
+              </button>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </div>
   );
 };
 

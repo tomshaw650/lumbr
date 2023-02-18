@@ -18,9 +18,13 @@ export const userRouter = router({
           .min(2, { message: "Must be 2 characters or more!" })
           .max(20, { message: "Must be shorter than 20 characters!" }),
         interests: z.array(
-          z.string(),
-        )
-    }))
+          z.object({
+            tag_id: z.string(),
+            user_id: z.string(),
+          })
+        ),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       const user = await prisma.user.update({
         where: {
@@ -30,8 +34,14 @@ export const userRouter = router({
           name: input.name,
           username: input.username,
           interests: {
-            connect: input.interests.map((tagId) => ({ tag_id: tagId, user_id: ctx?.session?.user?.id })),
-          }
+            create: input.interests.map((tag: any) => ({
+              tag: {
+                connect: {
+                  tag_id: tag.tag_id,
+                },
+              },
+            })),
+          },
         },
       });
       return user;
