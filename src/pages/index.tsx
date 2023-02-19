@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import SwitchTheme from "../components/SwitchTheme";
+import Link from "next/link";
 
 const LandingPage = () => {
   const { data: session, status } = useSession();
@@ -11,29 +12,35 @@ const LandingPage = () => {
   }
 
   return (
-    <div>
+    <div className="relative min-h-screen">
       <nav className="navbar flex">
         <div className="flex-none">
-          <button className="dbtn btn-ghost btn-circle ml-10">Logo</button>
+          <Link href="/" className="btn-ghost btn-circle btn ml-5 md:ml-10">
+            <img src="/lumbr.png" />
+          </Link>
         </div>
-        <ul className="ml-20 flex-1">
-          <li className="btn-ghost btn text-lg normal-case">what is lumbr?</li>
+        <ul className="flex-1">
+          <li className="link ml-5 text-lg normal-case md:ml-20">
+            <Link href="/what-is-lumbr" className="hover:font-bold">
+              what is lumbr?
+            </Link>
+          </li>
         </ul>
+        <SwitchTheme />
         <div className="flex-none">
-          <SwitchTheme />
           {!session && (
             <button
               onClick={() => {
                 router.push("/auth/login");
               }}
-              className="btn-primary btn-lg btn ml-20 mr-5 text-white"
+              className="btn-primary btn-lg btn ml-2 text-white"
             >
               Login
             </button>
           )}
         </div>
       </nav>
-      <section className="grid w-full grid-cols-1 grid-rows-2 place-content-center place-items-end md:grid-cols-2">
+      <section className="grid grid-cols-1 grid-rows-2 place-content-center place-items-end pb-16 md:grid-cols-2">
         <div className="md:row-span-auto row-span-2 mx-auto mt-10 ml-10 place-self-center p-10">
           <h1 className="mb-4 text-5xl font-bold md:text-6xl">
             A place to connect.
@@ -55,7 +62,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      <footer className="footer bg-neutral p-10"></footer>
+      <footer className="footer absolute bottom-0 left-0 w-full bg-neutral p-10"></footer>
     </div>
   );
 };
