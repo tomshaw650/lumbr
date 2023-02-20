@@ -1,7 +1,8 @@
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import SwitchTheme from "../components/SwitchTheme";
 import Link from "next/link";
+import Head from "next/head";
 
 const LandingPage = () => {
   const { data: session, status } = useSession();
@@ -13,6 +14,9 @@ const LandingPage = () => {
 
   return (
     <div className="relative min-h-screen">
+      <Head>
+        <title>Lumbr</title>
+      </Head>
       <nav className="navbar flex">
         <div className="flex-none">
           <Link href="/" className="btn-ghost btn-circle btn ml-5 md:ml-10">
@@ -36,6 +40,16 @@ const LandingPage = () => {
               className="btn-primary btn-lg btn ml-2 text-white"
             >
               Login
+            </button>
+          )}
+          {session && (
+            <button
+              onClick={() => {
+                signOut();
+              }}
+              className="btn-primary btn-lg btn ml-2 text-white"
+            >
+              Logout
             </button>
           )}
         </div>

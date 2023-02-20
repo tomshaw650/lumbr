@@ -1,30 +1,45 @@
+/**
+ *
+ * This page shows when the use registers for the first time
+ * It allows them to alter their name, set a username
+ * and add interests optionally.
+ *
+ */
+
 import type { NextPage } from "next";
-import { useEffect } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
+import Head from "next/head";
+
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { Formik, Form, Field, FieldArray } from "formik";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { trpc } from "../../utils/trpc";
 
-// TODO:
-// the page obv needs styles
-// the page neesd proper error handling
+import { Formik, Form, Field } from "formik";
+import SwitchTheme from "../../components/SwitchTheme";
 
 const NewUser: NextPage = () => {
+  // initialise some state
+  const [error, setError] = useState(null);
+  const [animationParent] = useAutoAnimate();
+
+  // initialise the router and trpc queries
   const router = useRouter();
+  const { data: session, status } = useSession();
   const user = trpc.user.getUser.useQuery();
   const update = trpc.user.update.useMutation();
   const tags = trpc.auth.getAllTags.useQuery();
 
-  const { data: session } = useSession();
+  // if the user is not logged in, redirect to login page
+  if (status === "unauthenticated") {
+    router.push("/");
+  }
 
-  // if the user has set a username (has been here before)
-  // redirect them to the home page
-  useEffect(() => {
-    if (user.data?.username !== undefined) {
-      router.push("/home");
-      console.log(user.data?.username);
-    }
-  }, []);
+  // if username is set and user is logged in, redirect to home page
+  if (user.data?.username && status === "authenticated") {
+    router.push("/home");
+  }
 
   // loading state until user is loaded
   // checking user as its important to fill out the form
@@ -32,35 +47,108 @@ const NewUser: NextPage = () => {
     return <div>Loading...</div>;
   }
 
+  // for use in splitting the name into first and last
+  // @ts-ignore
+  const name = user.data?.name.split(" ");
+
   return (
-    <div className="flex h-screen w-screen">
+    <div className="fixed flex w-full flex-col">
+      <Head>
+        <title>Lumbr | Account Setup</title>
+      </Head>
+      <nav className="navbar flex">
+        <div className="flex-none">
+          <Link href="/" className="btn-ghost btn-circle btn ml-10">
+            <img src="/lumbr.png" />
+          </Link>
+        </div>
+        <div className="navbar-end flex-1 md:mr-10">
+          <SwitchTheme />
+        </div>
+      </nav>
+      <header className="flex flex-col place-items-center">
+        <h1 className="text-5xl font-bold">Almost there...</h1>
+        <ul className="steps steps-vertical lg:mt-10 lg:steps-horizontal">
+          <li className="step-primary step font-bold" />
+          <li className="step-primary step font-bold" />
+          <li className="step font-bold" data-content="✓" />
+        </ul>
+      </header>
       <Formik
-        initialValues={{ name: user.data?.name, username: "", interests: [] }}
+        initialValues={{
+          // @ts-ignore
+          firstName: name[0],
+          // @ts-ignore
+          lastName: name[1],
+          username: "",
+          interests: [],
+        }}
         onSubmit={async (values: any, { setSubmitting }) => {
+          // remove any whitespace from firstname and lastname
+          values.firstName = values.firstName.replace(/\s/g, "");
+          values.lastName = values.lastName.replace(/\s/g, "");
+
+          // if first name or last name is empty, set error
+          if (values.firstName === "" || values.lastName === "") {
+            // @ts-ignore
+            setError("First name and last name cannot be empty.");
+            return;
+          }
+
           setSubmitting(false);
           const interests = values.interests.map((tag: String) => ({
             user_id: user.data?.id,
             tag_id: tag,
           }));
-
-          console.log(interests);
-          await update.mutateAsync({
-            name: values.name,
-            username: values.username,
-            interests: interests,
-          });
+          await update
+            .mutateAsync({
+              name: values.firstName + " " + values.lastName,
+              username: values.username,
+              interests: interests,
+            })
+            .then(() => {
+              router.push("/home");
+            })
+            .catch((err) => {
+              const message = err.message;
+              const error = JSON.parse(message);
+              setError(error[0]?.message);
+            });
         }}
       >
         {({ isSubmitting }) => (
-          <Form className="flex items-center rounded-lg border-gray-300 p-4">
-            <div className="form-control flex w-full max-w-xs flex-col">
+          <Form
+            ref={animationParent}
+            className="flex items-center justify-around"
+          >
+            {error && (
+              <div className="alert alert-error absolute -top-12 z-10 max-w-md shadow-lg">
+                <p>
+                  <span className="font-bold">Error:</span> {error}
+                </p>
+                <button
+                  type="button"
+                  className="btn-ghost btn-sm btn-circle btn text-lg font-extrabold"
+                  onClick={() => setError(null)}
+                >
+                  X
+                </button>
+              </div>
+            )}
+            <div className="form-control">
               <label className="label" htmlFor="name">
                 <span className="label-text">What is your name?</span>
               </label>
               <Field
-                name="name"
+                name="firstName"
                 type="text"
-                placeholder="Name"
+                placeholder="First Name"
+                className="input-bordered input mb-4 bg-white"
+              />
+              <Field
+                name="lastName"
+                type="text"
+                placeholder="Last Name"
                 className="input-bordered input mb-4 bg-white"
               />
               <label className="label" htmlFor="username">
@@ -80,7 +168,8 @@ const NewUser: NextPage = () => {
               />
               <label className="label" htmlFor="interests">
                 <span className="label-text">
-                  What are your developer interests?
+                  What are your developer interests?{" "}
+                  <span className="italic">(optional)</span>
                 </span>
               </label>
               <Field
