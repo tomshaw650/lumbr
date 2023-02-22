@@ -1,12 +1,16 @@
 import { type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
-import { Sofia_Sans } from "@next/font/google"
+import { Sofia_Sans } from "@next/font/google";
 
 import { trpc } from "../utils/trpc";
 import "../styles/globals.css";
 
-const sofia_sans = Sofia_Sans({ subsets: ["latin"], display: "swap" });
+const sofia_sans = Sofia_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  fallback: ["system-ui", "arial"],
+});
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,

@@ -20,7 +20,7 @@ const Home = () => {
   }
 
   return (
-    <main>
+    <div>
       <h1 className="text-4xl">This is the logged in homepage</h1>
       <h2 className="text-2xl">Welcome, {user.data?.username}!</h2>
       <button
@@ -30,7 +30,7 @@ const Home = () => {
       >
         Sign Out
       </button>
-    </main>
+    </div>
   );
 };
 
