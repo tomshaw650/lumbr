@@ -10,8 +10,9 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
+import Image from "next/image";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { trpc } from "../../utils/trpc";
@@ -21,7 +22,7 @@ import SwitchTheme from "../../components/SwitchTheme";
 
 const NewUser: NextPage = () => {
   // initialise some state
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<null | string>(null);
   const [animationParent] = useAutoAnimate();
 
   // initialise the router and trpc queries
@@ -48,8 +49,7 @@ const NewUser: NextPage = () => {
   }
 
   // for use in splitting the name into first and last
-  // @ts-ignore
-  const name = user.data?.name.split(" ");
+  const name = user?.data?.name?.split(" ");
 
   return (
     <div className="fixed flex w-full flex-col">
@@ -59,7 +59,7 @@ const NewUser: NextPage = () => {
       <nav className="navbar flex">
         <div className="flex-none">
           <Link href="/" className="btn-ghost btn-circle btn ml-10">
-            <img src="/lumbr.png" />
+            <Image alt="Lumbr logo" src="/lumbr.png" />
           </Link>
         </div>
         <div className="navbar-end flex-1 md:mr-10">
@@ -76,10 +76,8 @@ const NewUser: NextPage = () => {
       </header>
       <Formik
         initialValues={{
-          // @ts-ignore
-          firstName: name[0],
-          // @ts-ignore
-          lastName: name[1],
+          firstName: name?.[0],
+          lastName: name?.[1],
           username: "",
           interests: [],
         }}
@@ -90,13 +88,12 @@ const NewUser: NextPage = () => {
 
           // if first name or last name is empty, set error
           if (values.firstName === "" || values.lastName === "") {
-            // @ts-ignore
             setError("First name and last name cannot be empty.");
             return;
           }
 
           setSubmitting(false);
-          const interests = values.interests.map((tag: String) => ({
+          const interests = values.interests.map((tag: string) => ({
             user_id: user.data?.id,
             tag_id: tag,
           }));

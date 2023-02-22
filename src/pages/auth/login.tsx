@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
+import Image from "next/image";
 import SwitchTheme from "../../components/SwitchTheme";
 
 const LogIn = () => {
@@ -26,7 +27,7 @@ const LogIn = () => {
       <nav className="navbar flex">
         <div className="flex-none">
           <Link href="/" className="btn-ghost btn-circle btn ml-10">
-            <img src="/lumbr.png" />
+            <Image alt="Lumbr logo" src="/lumbr.png" />
           </Link>
         </div>
         <div className="navbar-end flex-1 md:mr-10">
