@@ -73,11 +73,13 @@ model VerificationToken {
 model Log {
   log_id      String  @id @default(cuid())
   user_id     String
+  post_id     String
   title       String
   description String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt 
   user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  posts       Post[]
   log_tags    LogTag[]
   comments    Comment[]
   likes       Like[]
@@ -87,16 +89,19 @@ model Log {
 
 model Post {
   post_id     String  @id @default(cuid())
+  log_id      String
   user_id     String
   title       String
   body        String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
   user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  log         Log      @relation(fields: [log_id], references: [log_id], onDelete: Cascade)
   comments    Comment[]
   likes       Like[]
 
   @@index([user_id])
+  @@index([log_id])
 }
 
 model Comment {
