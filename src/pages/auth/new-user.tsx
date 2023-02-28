@@ -59,7 +59,7 @@ const NewUser: NextPage = () => {
       <nav className="navbar flex">
         <div className="flex-none">
           <Link href="/" className="btn-ghost btn-circle btn ml-10">
-            <Image alt="Lumbr logo" src="/lumbr.png" />
+            <Image src="/lumbr.png" alt="Lumbr logo" width="100" height="100" />
           </Link>
         </div>
         <div className="navbar-end flex-1 md:mr-10">
