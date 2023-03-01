@@ -1,4 +1,4 @@
-import { router, protectedProcedure } from "../trpc";
+import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { prisma } from "../../db/client";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
@@ -13,6 +13,22 @@ export const userRouter = router({
     });
     return user;
   }),
+  // getUserPublic query to get user data from prisma, only trying once
+  getUserPublic: publicProcedure.query(async ({ ctx }) => {
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: ctx?.session?.user?.id,
+        },
+        rejectOnNotFound: true, // throw an error if user is not found
+      });
+      return user;
+    } catch (error) {
+      // handle error here, e.g. return null or throw a custom error
+      return null;
+    }
+  }),
+  // update mutation to add name, username and interests to user
   update: protectedProcedure
     .input(
       z.object({

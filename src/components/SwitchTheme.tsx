@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { FiMoon, FiSun } from "react-icons/fi";
 import { useLocalStorage } from "usehooks-ts";
 const SwitchTheme = () => {
@@ -11,16 +11,16 @@ const SwitchTheme = () => {
 
   //modify data-theme attribute on document.body when theme changes
   useEffect(() => {
-    const html = document.querySelector('html');
+    const html = document.querySelector("html");
     html?.setAttribute("data-theme", theme);
   }, [theme]);
 
   return (
-    <button className="btn btn-circle" onClick={toggleTheme}>
+    <button className="btn-circle btn" onClick={toggleTheme}>
       {theme === "dark" ? (
-        <FiMoon className="w-5 h-5" />
+        <FiMoon className="h-5 w-5" />
       ) : (
-        <FiSun className="w-5 h-5" />
+        <FiSun className="h-5 w-5" />
       )}
     </button>
   );

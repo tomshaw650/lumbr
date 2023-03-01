@@ -1,8 +1,9 @@
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import SwitchTheme from "../components/SwitchTheme";
-import Link from "next/link";
 import Head from "next/head";
+import Image from "next/image";
+import Link from "next/link";
 
 const LandingPage = () => {
   const { data: session, status } = useSession();
@@ -20,7 +21,7 @@ const LandingPage = () => {
       <nav className="navbar flex">
         <div className="flex-none">
           <Link href="/" className="btn-ghost btn-circle btn ml-5 md:ml-10">
-            <img src="/lumbr.png" />
+            <Image src="/lumbr.png" alt="Lumbr logo" width="100" height="100" />
           </Link>
         </div>
         <ul className="flex-1">
@@ -63,9 +64,26 @@ const LandingPage = () => {
             Welcome to lumbr. This is the place for developers to come together,
             share what they’ve been working on, and learn from one another!
           </p>
-          <button className="btn-primary btn-wide btn text-white">
-            Join here
-          </button>
+          {!session && (
+            <button
+              onClick={() => {
+                router.push("/auth/login");
+              }}
+              className="btn-primary btn-wide btn text-white"
+            >
+              Join here
+            </button>
+          )}
+          {session && (
+            <button
+              onClick={() => {
+                router.push("/home");
+              }}
+              className="btn-primary btn-wide btn text-white"
+            >
+              Join here
+            </button>
+          )}
         </div>
         <div className="col-span-1 row-span-1 md:col-span-1 md:col-start-2 md:row-span-2">
           <img
