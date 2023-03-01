@@ -125,29 +125,29 @@ const NewUser: NextPage = () => {
                 </p>
                 <button
                   type="button"
-                  className="btn-ghost btn-sm btn-circle btn text-lg font-extrabold"
+                  className="btn-ghost btn-circle btn-sm btn text-lg font-extrabold"
                   onClick={() => setError(null)}
                 >
                   X
                 </button>
               </div>
             )}
-            <div className="form-control">
+            <div className="form-control max-w-xs lg:max-w-md">
+              <label className="label" htmlFor="name">
+                <span className="label-text">What is your name?</span>
+              </label>
               <div className="flex">
-                <label className="label" htmlFor="name">
-                  <span className="label-text">What is your name?</span>
-                </label>
                 <Field
                   name="firstName"
                   type="text"
                   placeholder="First Name"
-                  className="input-bordered input mb-4 bg-white"
+                  className="input-bordered input mb-4 mr-2 w-32 bg-white"
                 />
                 <Field
                   name="lastName"
                   type="text"
                   placeholder="Last Name"
-                  className="input-bordered input mb-4 bg-white"
+                  className="input-bordered input mb-4 ml-2 w-32 bg-white"
                 />
               </div>
               <label className="label" htmlFor="username">
@@ -168,14 +168,19 @@ const NewUser: NextPage = () => {
               <label className="label" htmlFor="interests">
                 <span className="label-text">
                   What are your developer interests?{" "}
-                  <span className="italic">(optional)</span>
+                  <span
+                    className="tooltip tooltip-primary italic"
+                    data-tip="Select as many interests as you like!"
+                  >
+                    (optional)
+                  </span>
                 </span>
               </label>
               <Field
                 name="interests"
                 as="select"
                 multiple
-                className="select-bordered select mb-4 bg-white pt-2 text-lg"
+                className="select-bordered select mb-4 bg-white py-12 pt-2 text-lg"
               >
                 {tags.data?.map((tag) => (
                   <option key={tag.tag_id} value={tag.tag_id}>

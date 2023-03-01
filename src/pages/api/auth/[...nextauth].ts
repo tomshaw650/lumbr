@@ -33,6 +33,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     newUser: "/auth/new-user",
   },
+  debug: true,
 };
 
 export default NextAuth(authOptions);
