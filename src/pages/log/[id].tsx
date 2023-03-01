@@ -1,5 +1,5 @@
 import { GetStaticProps } from "next";
-import React from "react";
+import Head from "next/head";
 import Link from "next/link";
 import { prisma } from "../../server/db/client";
 import { trpc } from "../../utils/trpc";
@@ -16,8 +16,6 @@ const Log = (props: { log: Log }) => {
   // if the log doesn't exist, return a 404 page (TODO)
   if (!props.log) return <div>Log not found</div>;
 
-  console.log(window.innerWidth);
-
   const links = [
     { href: "/home", text: "Home", current: false },
     {
@@ -30,6 +28,9 @@ const Log = (props: { log: Log }) => {
 
   return (
     <div>
+      <Head>
+        <title>Lumbr | {props.log.title}</title>
+      </Head>
       <NavBar user={data} />
       <div className="ml-5 mt-2 flex">
         {links.map((link, index) => {

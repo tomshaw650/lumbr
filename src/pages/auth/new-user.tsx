@@ -34,7 +34,7 @@ const NewUser: NextPage = () => {
 
   // if the user is not logged in, redirect to login page
   if (status === "unauthenticated") {
-    router.push("/");
+    router.push("/auth/login");
   }
 
   // if username is set and user is logged in, redirect to home page
@@ -133,21 +133,23 @@ const NewUser: NextPage = () => {
               </div>
             )}
             <div className="form-control">
-              <label className="label" htmlFor="name">
-                <span className="label-text">What is your name?</span>
-              </label>
-              <Field
-                name="firstName"
-                type="text"
-                placeholder="First Name"
-                className="input-bordered input mb-4 bg-white"
-              />
-              <Field
-                name="lastName"
-                type="text"
-                placeholder="Last Name"
-                className="input-bordered input mb-4 bg-white"
-              />
+              <div className="flex">
+                <label className="label" htmlFor="name">
+                  <span className="label-text">What is your name?</span>
+                </label>
+                <Field
+                  name="firstName"
+                  type="text"
+                  placeholder="First Name"
+                  className="input-bordered input mb-4 bg-white"
+                />
+                <Field
+                  name="lastName"
+                  type="text"
+                  placeholder="Last Name"
+                  className="input-bordered input mb-4 bg-white"
+                />
+              </div>
               <label className="label" htmlFor="username">
                 <span className="label-text">Please enter a username</span>
                 <span
