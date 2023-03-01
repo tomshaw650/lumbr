@@ -5,7 +5,11 @@ import { useSession } from "next-auth/react";
 import NavBar from "../../components/NavBar";
 import { trpc } from "../../utils/trpc";
 import { Formik, Form, Field } from "formik";
-import { TRPCClientError } from "@trpc/client";
+
+interface inputValues {
+  title: string;
+  description: string;
+}
 
 const CreateLog: NextPage = () => {
   const [error, setError] = useState<null | string>(null);
@@ -29,7 +33,7 @@ const CreateLog: NextPage = () => {
       </header>
       <Formik
         initialValues={{ title: "", description: "" }}
-        onSubmit={async (values: any, { setSubmitting }) => {
+        onSubmit={async (values: inputValues, { setSubmitting }) => {
           if (values.title.length < 2 || values.title.length > 20) {
             setError("Log title must be between 2-20 characters");
             return;
@@ -61,7 +65,7 @@ const CreateLog: NextPage = () => {
                 </p>
                 <button
                   type="button"
-                  className="btn-ghost btn-sm btn-circle btn text-lg font-extrabold"
+                  className="btn-ghost btn-circle btn-sm btn text-lg font-extrabold"
                   onClick={() => setError(null)}
                 >
                   X

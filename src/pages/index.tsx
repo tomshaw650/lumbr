@@ -81,13 +81,16 @@ const LandingPage = () => {
               }}
               className="btn-primary btn-wide btn text-white"
             >
-              Join here
+              Go to Home
             </button>
           )}
         </div>
         <div className="col-span-1 row-span-1 md:col-span-1 md:col-start-2 md:row-span-2">
-          <img
-            src="robots.png"
+          <Image
+            priority={true}
+            width={500}
+            height={500}
+            src="/robots.png"
             alt="Happy little robots"
             className="mx-auto h-4/5 w-4/5"
           />

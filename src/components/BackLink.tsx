@@ -20,4 +20,6 @@ const BackLink: React.FC<Props> = React.memo(({ href, text, current }) => {
   );
 });
 
+BackLink.displayName = "BackLink";
+
 export default BackLink;

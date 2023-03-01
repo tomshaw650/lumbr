@@ -1,4 +1,4 @@
-import { Log as PrismaLog } from "@prisma/client";
+import type { Log as PrismaLog } from "@prisma/client";
 
 export interface Log extends PrismaLog {
   user: User;

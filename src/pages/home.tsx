@@ -6,7 +6,7 @@ import NavBar from "../components/NavBar";
 import { useEffect } from "react";
 
 const Home = () => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
   const { data, isLoading } = trpc.user.getUser.useQuery();
 
@@ -16,7 +16,7 @@ const Home = () => {
     }
   }, [data, isLoading, router]);
 
-  if (status === "loading" && isLoading) {
+  if (isLoading) {
     return <main>Loading...</main>;
   }
 

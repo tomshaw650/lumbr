@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { User } from "@prisma/client";
+import type { User } from "@prisma/client";
 import { signOut } from "next-auth/react";
 import SwitchTheme from "./SwitchTheme";
 
@@ -91,5 +91,7 @@ const NavBar: React.FC<Props> = React.memo(({ user }) => {
     </nav>
   );
 });
+
+NavBar.displayName = "NavBar";
 
 export default NavBar;
