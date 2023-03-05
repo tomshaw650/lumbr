@@ -6,6 +6,7 @@ import { trpc } from "../../utils/trpc";
 import { Log } from "../../types/prisma";
 import NavBar from "../../components/NavBar";
 import BackLink from "../../components/BackLink";
+import { Post } from "@prisma/client";
 
 const Log = (props: { log: Log }) => {
   const { data, isLoading } = trpc.user.getUserPublic.useQuery();
@@ -29,7 +30,9 @@ const Log = (props: { log: Log }) => {
   return (
     <div>
       <Head>
-        <title>Lumbr | {props.log.title}</title>
+        <title>
+          Lumbr | {props.log.user.username} - {props.log.title}
+        </title>
       </Head>
       <NavBar user={data} />
       <div className="ml-5 mt-2 flex">
@@ -124,7 +127,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     ...logInfo,
     created_at: logInfo?.created_at.toISOString(),
     updated_at: logInfo?.updated_at.toISOString(),
-    posts: logInfo.posts.map((post) => ({
+    posts: logInfo.posts.map((post: Post) => ({
       ...post,
       created_at: post.created_at.toISOString(),
       updated_at: post.updated_at.toISOString(),

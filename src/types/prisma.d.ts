@@ -1,16 +1,29 @@
-import type { Log as PrismaLog } from "@prisma/client";
+import type { Log as PrismaLog, Post as PrismaPost } from "@prisma/client";
 
+// extend the log with user and post info
 export interface Log extends PrismaLog {
   user: User;
-  posts: Post[];
+  posts: PostInfo[];
+}
+
+interface PostInfo {
+  post_id: string;
+  title: string;
+  created_at: DateTime;
 }
 
 interface User {
   username: string;
 }
 
-interface Post {
-  post_id: string;
+// extend the post with user and log info
+export interface Post extends PrismaPost {
+  user: User;
+  logs: LogInfo[];
+  created_at: string;
+}
+
+interface LogInfo {
+  log_id: string;
   title: string;
-  created_at: DateTime;
 }
