@@ -7,6 +7,9 @@ import { Post } from "../../types/prisma";
 import NavBar from "../../components/NavBar";
 import BackLink from "../../components/BackLink";
 import { Log } from "@prisma/client";
+import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 const Post = (props: { post: Post }) => {
   const { data, isLoading } = trpc.user.getUserPublic.useQuery();
@@ -69,8 +72,28 @@ const Post = (props: { post: Post }) => {
         </p>
         <p>{formatDate(props.post.created_at)}</p>
       </div>
-      <div className="mx-auto mt-5 flex max-w-xs rounded-md border-2 border-black border-opacity-20 bg-white p-5 dark:bg-inherit sm:max-w-4xl">
-        <p>{props.post.content}</p>
+      <div className="prose-sm mx-auto mt-5 flex max-w-xs flex-col rounded-md border-2 border-black border-opacity-20 bg-white p-5 dark:bg-inherit sm:max-w-4xl sm:prose md:prose-lg lg:prose-xl">
+        <ReactMarkdown
+          children={props.post.content}
+          components={{
+            code({ node, inline, className, children, style, ...props }) {
+              const match = /language-(\w+)/.exec(className || "");
+              return !inline && match ? (
+                <SyntaxHighlighter
+                  children={String(children).replace(/\n$/, "")}
+                  style={vscDarkPlus}
+                  language={match[1]}
+                  PreTag="div"
+                  {...props}
+                />
+              ) : (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              );
+            },
+          }}
+        />
       </div>
     </div>
   );
