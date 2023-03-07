@@ -13,6 +13,14 @@ export const userRouter = router({
     });
     return user;
   }),
+  getAllLogs: protectedProcedure.query(async ({ ctx }) => {
+    const logs = await prisma.log.findMany({
+      where: {
+        user_id: ctx?.session?.user?.id,
+      },
+    });
+    return logs;
+  }),
   // getUserPublic query to get user data from prisma, only trying once
   getUserPublic: publicProcedure.query(async ({ ctx }) => {
     try {
