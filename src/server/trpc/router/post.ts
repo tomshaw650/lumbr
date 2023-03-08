@@ -11,13 +11,13 @@ export const postRouter = router({
         title: z
           .string()
           .min(2, { message: "Title must be 2 characters or more." })
-          .max(20, { message: "Title must be shorter than 20 characters." }),
+          .max(30, { message: "Title must be shorter than 30 characters." }),
         content: z
           .string()
           .min(1, {
             message: "Content must be 1 character or more.",
           })
-          .max(1000, {
+          .max(2000, {
             message: "Content must be shorter than 1000 characters.",
           }),
         log_id: z.string(),

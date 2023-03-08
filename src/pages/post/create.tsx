@@ -49,8 +49,8 @@ const CreatePost: NextPage = () => {
       <Formik
         initialValues={{ title: "", content: "", log_id: "" }}
         onSubmit={async (values: inputValues, { setSubmitting }) => {
-          if (values.title.length < 2 || values.title.length > 20) {
-            setError("Post title must be between 2-20 characters");
+          if (values.title.length < 2 || values.title.length > 30) {
+            setError("Post title must be between 2-30 characters");
             return;
           }
           if (!values.log_id) {
