@@ -1,22 +1,26 @@
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
 import NavBar from "../components/NavBar";
 import { useEffect } from "react";
+import { SiAddthis } from "react-icons/si";
 
 const Home = () => {
   const { data: session } = useSession();
   const router = useRouter();
-  const { data, isLoading } = trpc.user.getUser.useQuery();
+  const { data: user, isLoading: userIsLoading } = trpc.user.getUser.useQuery();
+  const { data: logs, isLoading: logsIsLoading } =
+    trpc.user.getAllLogs.useQuery();
 
   useEffect(() => {
-    if (!isLoading && !data?.username) {
+    if (!userIsLoading && !user?.username) {
       router.push("/auth/new-user");
     }
-  }, [data, isLoading, router]);
+  }, [user, userIsLoading, router]);
 
-  if (isLoading) {
+  if (userIsLoading || logsIsLoading) {
     return <main>Loading...</main>;
   }
 
@@ -29,7 +33,33 @@ const Home = () => {
       <Head>
         <title>Lumbr | Home</title>
       </Head>
-      <NavBar user={data} />
+      <NavBar user={user} />
+      <div className="grid grid-cols-10">
+        <section className="col-span-2 flex h-screen flex-col border-r-2 border-neutral border-opacity-50">
+          <h1 className="p-5 text-4xl font-bold">Your logs</h1>
+          <Link
+            className="flex items-center gap-x-2 pl-5 hover:text-primary"
+            href="/log/create"
+          >
+            <span className="hidden text-xl underline sm:block">
+              Create a log
+            </span>
+            <SiAddthis className="text-xl" />
+          </Link>
+          <ul className="flex list-disc flex-col gap-y-2 p-10">
+            {logs?.map((log) => (
+              <li key={log.log_id}>
+                <Link href={`/log/${log.log_id}`}>
+                  <span className="hover:text-primary">{log.title}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section className="col-span-8">
+          <h1 className="p-5 text-4xl font-bold">Feed</h1>
+        </section>
+      </div>
     </div>
   );
 };

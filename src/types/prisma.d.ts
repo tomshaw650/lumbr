@@ -1,4 +1,8 @@
-import type { Log as PrismaLog, Post as PrismaPost } from "@prisma/client";
+import type {
+  Log as PrismaLog,
+  Post as PrismaPost,
+  Comment as PrismaComment,
+} from "@prisma/client";
 
 // extend the log with user and post info
 export interface Log extends PrismaLog {
@@ -14,6 +18,7 @@ interface PostInfo {
 
 interface User {
   username: string;
+  image: string;
 }
 
 // extend the post with user and log info
@@ -26,4 +31,9 @@ export interface Post extends PrismaPost {
 interface LogInfo {
   log_id: string;
   title: string;
+}
+
+// extend the comment with user info
+export interface Comment extends PrismaComment {
+  user: User;
 }

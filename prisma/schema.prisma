@@ -117,13 +117,13 @@ model LogPost {
 model Comment {
   comment_id String   @id @default(cuid())
   user_id    String
-  log_id     String
-  post_id    String
+  log_id     String?
+  post_id    String?
   body       String
   created_at DateTime @default(now())
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  log        Log      @relation(fields: [log_id], references: [log_id], onDelete: Cascade)
-  post       Post     @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
+  log        Log?      @relation(fields: [log_id], references: [log_id], onDelete: Cascade)
+  post       Post?     @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
 
   @@index([user_id])
   @@index([log_id])

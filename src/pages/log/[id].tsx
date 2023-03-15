@@ -7,6 +7,7 @@ import { Log } from "../../types/prisma";
 import NavBar from "../../components/NavBar";
 import BackLink from "../../components/BackLink";
 import { Post } from "@prisma/client";
+import CommentSection from "../../components/CommentSection";
 
 const Log = (props: { log: Log }) => {
   const { data, isLoading } = trpc.user.getUserPublic.useQuery();
@@ -60,7 +61,15 @@ const Log = (props: { log: Log }) => {
         </p>
         <p className="mt-5 max-w-sm text-center">{props.log.description}</p>
       </div>
-      <div className="mt-10 flex flex-col items-center">
+      <div className="divider mt-5" />
+      {data?.username === props.log.user.username && (
+        <div className="flex justify-center">
+          <Link href={`/post/create`}>
+            <button className="btn-primary btn text-white">Add Post</button>
+          </Link>
+        </div>
+      )}
+      <div className="mt-5 flex flex-col items-center">
         {props.log.posts.map((post) => (
           <Link
             key={post.post_id}
@@ -79,7 +88,10 @@ const Log = (props: { log: Log }) => {
         ))}
       </div>
       <div className="divider mt-5" />
-      <h2 className="text-2xl font-bold">Comments</h2>
+      <div className="mb-5 flex flex-col items-center">
+        <h2 className="text-2xl font-bold">Comment Section</h2>
+        <CommentSection />
+      </div>
     </div>
   );
 };

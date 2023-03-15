@@ -3,13 +3,16 @@ import Head from "next/head";
 import Link from "next/link";
 import { prisma } from "../../server/db/client";
 import { trpc } from "../../utils/trpc";
-import { Post } from "../../types/prisma";
+import type { Post } from "../../types/prisma";
+import type { Log } from "@prisma/client";
 import NavBar from "../../components/NavBar";
 import BackLink from "../../components/BackLink";
-import { Log } from "@prisma/client";
 import ReactMarkdown from "react-markdown";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import SyntaxHighlighter from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import formatDate from "../../utils/formatDate";
+import CommentSection from "../../components/CommentSection";
+import markdownToHtml from "../../utils/markdown";
 
 const Post = (props: { post: Post }) => {
   const { data, isLoading } = trpc.user.getUserPublic.useQuery();
@@ -95,18 +98,13 @@ const Post = (props: { post: Post }) => {
           }}
         />
       </div>
+      <div className="divider mt-5" />
+      <div className="mb-5 flex flex-col items-center">
+        <h2 className="text-2xl font-bold">Comment Section</h2>
+        <CommentSection />
+      </div>
     </div>
   );
-};
-
-// take the ISOString and format it to a readable date (UK format)
-const formatDate = (date: string) => {
-  const dateFormatter = new Intl.DateTimeFormat("en-GB", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-  return dateFormatter.format(new Date(date));
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
