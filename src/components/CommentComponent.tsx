@@ -1,4 +1,4 @@
-import { Comment } from "../types/prisma";
+import type { Comment } from "../types/prisma";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -7,11 +7,7 @@ import { trpc } from "../utils/trpc";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 
-interface Props {
-  comment: Comment;
-}
-
-const CommentComponent: React.FC<Props> = ({ comment }) => {
+const CommentComponent = ({ comment }: { comment: Comment }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
@@ -65,7 +61,8 @@ const CommentComponent: React.FC<Props> = ({ comment }) => {
           className="btn-ghost btn-circle avatar btn hover:ring hover:ring-primary hover:ring-offset-base-100"
         >
           <Image
-            src={comment.user.image}
+            priority={true}
+            src={comment.user.image ? comment.user.image : "/user.png"}
             alt="Commenter's Profile Picture"
             width="40"
             height="40"

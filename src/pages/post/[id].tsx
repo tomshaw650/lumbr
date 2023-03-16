@@ -12,7 +12,6 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import formatDate from "../../utils/formatDate";
 import CommentSection from "../../components/CommentSection";
-import markdownToHtml from "../../utils/markdown";
 
 const Post = (props: { post: Post }) => {
   const { data, isLoading } = trpc.user.getUserPublic.useQuery();
@@ -56,7 +55,7 @@ const Post = (props: { post: Post }) => {
             <BackLink
               key={index}
               href={link.href}
-              text={link.text}
+              text={link.text || ""}
               current={link.current}
             />
           );

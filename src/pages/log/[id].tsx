@@ -42,7 +42,7 @@ const Log = (props: { log: Log }) => {
             <BackLink
               key={index}
               href={link.href}
-              text={link.text}
+              text={link.text || ""}
               current={link.current}
             />
           );

@@ -17,8 +17,8 @@ interface PostInfo {
 }
 
 interface User {
-  username: string;
-  image: string;
+  username: string | null;
+  image: string | null;
 }
 
 // extend the post with user and log info

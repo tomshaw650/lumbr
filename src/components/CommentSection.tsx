@@ -15,15 +15,15 @@ const CommentSection: React.FC = () => {
   const isLogSection = router.pathname.startsWith("/log/");
 
   // get the comments from the query, if it's a log section, get the log comments, otherwise get the post comments
-  const { data: comments, isLoading: commentsLoading } =
+  const { data: comments = [], isLoading: commentsLoading } =
     trpc.comment.getAll.useQuery({
       logId: isLogSection ? id : undefined,
       postId: !isLogSection ? id : undefined,
     });
 
-  if (comments === undefined) return <div>Loading...</div>;
-
   if (commentsLoading) return <div>Loading...</div>;
+
+  console.log(comments);
 
   return (
     <div className="mt-8">

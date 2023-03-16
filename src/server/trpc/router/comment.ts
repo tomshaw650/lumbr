@@ -53,7 +53,7 @@ export const commentRouter = router({
         comment_id: z.string(),
       })
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       const comment = await prisma.comment.delete({
         where: {
           comment_id: input.comment_id,

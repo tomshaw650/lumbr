@@ -1,5 +1,5 @@
-import { Comment } from "../types/prisma";
-import CommentComponent from "./Comment";
+import type { Comment } from "../types/prisma";
+import CommentComponent from "./CommentComponent";
 
 interface Props {
   comments: Comment[];
