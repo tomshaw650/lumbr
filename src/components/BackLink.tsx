@@ -1,4 +1,3 @@
-// create backlink component
 import React from "react";
 import Link from "next/link";
 import { IoIosArrowForward } from "react-icons/io";

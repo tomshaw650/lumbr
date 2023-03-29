@@ -23,8 +23,6 @@ const CommentSection: React.FC = () => {
 
   if (commentsLoading) return <div>Loading...</div>;
 
-  console.log(comments);
-
   return (
     <div className="mt-8">
       <div className="mb-8 flex flex-col items-center">

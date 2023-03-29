@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import type { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -12,9 +13,19 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import formatDate from "../../utils/formatDate";
 import CommentSection from "../../components/CommentSection";
+import LikePostButton from "../../components/LikePostButton";
+import UsersLikedPostModal from "../../components/UsersLikedPostModal";
 
 const Post = (props: { post: Post }) => {
+  const [likeCount, setLikeCount] = useState(0);
   const { data, isLoading } = trpc.user.getUserPublic.useQuery();
+  const allLikes = trpc.post.getAllLikes.useQuery({
+    postId: props.post.post_id,
+  });
+
+  useEffect(() => {
+    setLikeCount(allLikes.data?.length || 0);
+  }, [allLikes.data, likeCount]);
 
   const log = props.post.logs?.[0];
 
@@ -99,6 +110,27 @@ const Post = (props: { post: Post }) => {
       </div>
       <div className="divider mt-5" />
       <div className="mb-5 flex flex-col items-center">
+        <div className="mb-5 flex items-center gap-x-5">
+          <label
+            className="cursor-pointer text-lg underline hover:text-primary"
+            htmlFor="likes-modal"
+          >
+            {likeCount === 1 ? likeCount + " like" : likeCount + " likes"}
+          </label>
+          <input type="checkbox" id="likes-modal" className="modal-toggle" />
+          <div className="modal" id="likes-modal">
+            <div className="modal-box">
+              <h3 className="text-lg font-bold">Users who liked this post:</h3>
+              <UsersLikedPostModal postId={props.post.post_id} />
+              <div className="modal-action">
+                <label htmlFor="likes-modal" className="btn-circle btn">
+                  X
+                </label>
+              </div>
+            </div>
+          </div>
+          <LikePostButton postId={props.post.post_id} />
+        </div>
         <h2 className="text-2xl font-bold">Comment Section</h2>
         <CommentSection />
       </div>

@@ -57,7 +57,8 @@ model User {
   logs          Log[]
   posts         Post[]
   comments      Comment[]
-  likes         Like[]
+  likedLogs     LikeLog[]
+  likedPosts    LikePost[]
   followers     Follow[]  @relation("followed_user")
   following     Follow[]  @relation("following_user")
 }
@@ -81,7 +82,7 @@ model Log {
   posts       Post[]
   log_tags    LogTag[]
   comments    Comment[]
-  likes       Like[]
+  likes       LikeLog[]
   LogPost     LogPost[]
 
   @@index([user_id])
@@ -98,7 +99,7 @@ model Post {
   logs       Log[]
   LogPost    LogPost[]
   Comment    Comment[]
-  Like       Like[]
+  Like       LikePost[]
 
   @@index([user_id])
 }
@@ -115,13 +116,13 @@ model LogPost {
 }
 
 model Comment {
-  comment_id String   @id @default(cuid())
+  comment_id String    @id @default(cuid())
   user_id    String
   log_id     String?
   post_id    String?
   body       String
-  created_at DateTime @default(now())
-  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  created_at DateTime  @default(now())
+  user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   log        Log?      @relation(fields: [log_id], references: [log_id], onDelete: Cascade)
   post       Post?     @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
 
@@ -130,18 +131,27 @@ model Comment {
   @@index([post_id])
 }
 
-model Like {
-  like_id    String   @id @default(cuid())
+model LikeLog {
   user_id    String
   log_id     String
-  post_id    String
-  created_at DateTime @default(now())
-  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  log        Log      @relation(fields: [log_id], references: [log_id], onDelete: Cascade)
-  post       Post     @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
+  created_at DateTime  @default(now())
+  user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  log        Log       @relation(fields: [log_id], references: [log_id], onDelete: Cascade)
 
+  @@id([user_id, log_id])
   @@index([user_id])
   @@index([log_id])
+}
+
+model LikePost {
+  user_id    String
+  post_id    String
+  created_at DateTime  @default(now())
+  user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  post       Post      @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
+
+  @@id([user_id, post_id])
+  @@index([user_id])
   @@index([post_id])
 }
 

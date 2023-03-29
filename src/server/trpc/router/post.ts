@@ -1,4 +1,4 @@
-import { router, protectedProcedure } from "../trpc";
+import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { prisma } from "../../db/client";
 import { z } from "zod";
 import xss from "xss";
@@ -60,5 +60,73 @@ export const postRouter = router({
         },
       });
       return post;
+    }),
+
+  getUserLike: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const like = await prisma.likePost.findFirst({
+        where: {
+          user_id: ctx?.session?.user?.id,
+          post_id: input.postId,
+        },
+      });
+      return like;
+    }),
+
+  getAllLikes: publicProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const likes = await prisma.likePost.findMany({
+        where: {
+          post_id: input.postId,
+        },
+        include: {
+          user: true,
+        },
+      });
+      return likes;
+    }),
+
+  like: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const like = await prisma.likePost.create({
+        data: {
+          user_id: ctx?.session?.user?.id,
+          post_id: input.postId,
+        },
+      });
+      return !!like;
+    }),
+
+  unlike: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const like = await prisma.likePost.delete({
+        where: {
+          user_id_post_id: {
+            user_id: ctx?.session?.user?.id,
+            post_id: input.postId,
+          },
+        },
+      });
+      return !!like;
     }),
 });
