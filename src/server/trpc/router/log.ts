@@ -38,7 +38,63 @@ export const logRouter = router({
           description: input.description,
         },
       });
+
       return log;
+    }),
+
+  addTagsToLog: protectedProcedure
+    .input(
+      z.object({
+        logId: z.string(),
+        log_tags: z.array(
+          z.object({
+            tag_id: z.string(),
+          })
+        ),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const log = await prisma.log.update({
+        where: {
+          log_id: input.logId,
+        },
+        data: {
+          log_tags: {
+            create: input.log_tags,
+          },
+        },
+      });
+      return log;
+    }),
+
+  removeTagFromLog: protectedProcedure
+    .input(
+      z.object({
+        logId: z.string(),
+        tagId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const logTag = await prisma.logTag.findUnique({
+        where: {
+          log_id_tag_id: {
+            log_id: input.logId,
+            tag_id: input.tagId,
+          },
+        },
+      });
+
+      if (logTag) {
+        await prisma.logTag.delete({
+          where: {
+            log_id_tag_id: {
+              log_id: input.logId,
+              tag_id: input.tagId,
+            },
+          },
+        });
+      }
+      return logTag;
     }),
 
   getUserLike: protectedProcedure
@@ -107,5 +163,23 @@ export const logRouter = router({
         },
       });
       return !!like;
+    }),
+
+  getLogTags: publicProcedure
+    .input(
+      z.object({
+        logId: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const logTags = await prisma.logTag.findMany({
+        where: {
+          log_id: input.logId,
+        },
+        include: {
+          tag: true,
+        },
+      });
+      return logTags;
     }),
 });

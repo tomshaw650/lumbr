@@ -11,11 +11,13 @@ import { Post } from "@prisma/client";
 import CommentSection from "../../components/CommentSection";
 import LikeLogButton from "../../components/LikeLogButton";
 import UsersLikedLogModal from "../../components/UsersLikedLogModal";
+import AddTagsModal from "../../components/AddTagsModal";
 
 const Log = (props: { log: Log }) => {
   const [likeCount, setLikeCount] = useState(0);
   const { data, isLoading } = trpc.user.getUserPublic.useQuery();
   const allLikes = trpc.log.getAllLikes.useQuery({ logId: props.log.log_id });
+  const logTags = trpc.log.getLogTags.useQuery({ logId: props.log.log_id });
 
   useEffect(() => {
     setLikeCount(allLikes.data?.length || 0);
@@ -36,6 +38,8 @@ const Log = (props: { log: Log }) => {
     },
     { href: window.location.href, text: props.log.title, current: true },
   ];
+
+  console.log(logTags.data);
 
   return (
     <div>
@@ -68,6 +72,40 @@ const Log = (props: { log: Log }) => {
             {props.log.user.username}
           </Link>
         </p>
+        <div className="mt-2 flex flex-col place-items-center">
+          {data?.username === props.log.user.username && (
+            <>
+              <label
+                htmlFor="add-tags"
+                className="cursor-pointer text-sm text-gray-500 hover:underline"
+              >
+                Add tags?
+              </label>
+            </>
+          )}
+          <ul className="flex flex-wrap justify-center gap-x-2 gap-y-1">
+            {logTags.data?.map((tag) => (
+              <li
+                className="badge-primary badge text-white"
+                key={tag.tag.tag_id}
+              >
+                {tag.tag.tag_name}
+              </li>
+            ))}
+          </ul>
+          <input type="checkbox" id="add-tags" className="modal-toggle" />
+          <div className="modal">
+            <div className="modal-box">
+              <h3 className="text-lg font-bold">Add some tags</h3>
+              <AddTagsModal logId={props.log.log_id} />
+              <div className="modal-action">
+                <label htmlFor="add-tags" className="btn-circle btn bg-white">
+                  X
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
         <p className="mt-5 max-w-sm text-center">{props.log.description}</p>
       </div>
       <div className="divider mt-5" />
