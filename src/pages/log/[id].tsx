@@ -39,8 +39,6 @@ const Log = (props: { log: Log }) => {
     { href: window.location.href, text: props.log.title, current: true },
   ];
 
-  console.log(logTags.data);
-
   return (
     <div>
       <Head>

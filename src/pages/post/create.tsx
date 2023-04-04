@@ -58,8 +58,6 @@ const CreatePost: NextPage = () => {
             return;
           }
 
-          console.log(values.content);
-
           setSubmitting(false);
           await createPost
             .mutateAsync({

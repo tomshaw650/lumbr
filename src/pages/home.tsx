@@ -1,10 +1,12 @@
+import { useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
 import NavBar from "../components/NavBar";
-import { useEffect } from "react";
+import ExploreView from "../components/ExploreView";
+
 import { SiAddthis } from "react-icons/si";
 
 const Home = () => {
@@ -35,7 +37,7 @@ const Home = () => {
       </Head>
       <NavBar user={user} />
       <div className="grid grid-cols-10">
-        <section className="col-span-2 flex h-screen flex-col border-r-2 border-neutral border-opacity-50">
+        <section className="sticky col-span-2 flex h-screen flex-col border-r-2 border-neutral border-opacity-50">
           <h1 className="p-5 text-4xl font-bold">Your logs</h1>
           <Link
             className="flex items-center gap-x-2 pl-5 hover:text-primary"
@@ -58,6 +60,7 @@ const Home = () => {
         </section>
         <section className="col-span-8">
           <h1 className="p-5 text-4xl font-bold">Feed</h1>
+          <ExploreView />
         </section>
       </div>
     </div>
