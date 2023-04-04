@@ -57,7 +57,7 @@ const CommentComponent = ({ comment }: { comment: Comment }) => {
       </p>
       <div className="flex items-center gap-x-2">
         <Link
-          href={`/u/${comment.user_id}`}
+          href={`/u/${comment.user.username}`}
           className="btn-ghost btn-circle avatar btn hover:ring hover:ring-primary hover:ring-offset-base-100"
         >
           <Image

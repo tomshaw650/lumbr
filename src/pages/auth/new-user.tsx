@@ -19,6 +19,7 @@ import { trpc } from "../../utils/trpc";
 
 import { Formik, Form, Field } from "formik";
 import SwitchTheme from "../../components/SwitchTheme";
+import { LoadingPage } from "../../components/loading";
 
 const NewUser: NextPage = () => {
   // initialise some state
@@ -45,7 +46,7 @@ const NewUser: NextPage = () => {
   // loading state until user is loaded
   // checking user as its important to fill out the form
   if (user.isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingPage />;
   }
 
   // for use in splitting the name into first and last
@@ -125,7 +126,7 @@ const NewUser: NextPage = () => {
                 </p>
                 <button
                   type="button"
-                  className="btn-ghost btn-circle btn-sm btn text-lg font-extrabold"
+                  className="btn-ghost btn-sm btn-circle btn text-lg font-extrabold"
                   onClick={() => setError(null)}
                 >
                   X

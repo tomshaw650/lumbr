@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -12,6 +12,7 @@ import CommentSection from "../../components/CommentSection";
 import LikeLogButton from "../../components/LikeLogButton";
 import UsersLikedLogModal from "../../components/UsersLikedLogModal";
 import AddTagsModal from "../../components/AddTagsModal";
+import { LoadingPage } from "../../components/loading";
 
 const Log = (props: { log: Log }) => {
   const [likeCount, setLikeCount] = useState(0);
@@ -24,7 +25,7 @@ const Log = (props: { log: Log }) => {
   }, [allLikes.data, likeCount]);
 
   // wait until we have the user data before rendering the page
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingPage />;
 
   // if the log doesn't exist, return a 404 page (TODO)
   if (!props.log) return <div>Log not found</div>;

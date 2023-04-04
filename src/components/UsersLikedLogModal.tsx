@@ -15,7 +15,7 @@ const UsersLikedLogModal: React.FC<Props> = ({ logId }) => {
       {likes.map((like) => (
         <div className="flex items-center gap-x-2" key={like.user_id}>
           <Link
-            href={`/u/${like.user_id}`}
+            href={`/u/${like.user.username}`}
             className="btn-ghost btn-circle avatar btn hover:ring hover:ring-primary hover:ring-offset-base-100"
           >
             <Image

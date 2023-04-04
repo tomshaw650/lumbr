@@ -8,6 +8,7 @@ import NavBar from "../components/NavBar";
 import ExploreView from "../components/ExploreView";
 
 import { SiAddthis } from "react-icons/si";
+import { LoadingPage } from "../components/loading";
 
 const Home = () => {
   const { data: session } = useSession();
@@ -23,7 +24,7 @@ const Home = () => {
   }, [user, userIsLoading, router]);
 
   if (userIsLoading || logsIsLoading) {
-    return <main>Loading...</main>;
+    return <LoadingPage />;
   }
 
   if (!session) {

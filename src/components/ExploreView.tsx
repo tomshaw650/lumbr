@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { trpc } from "../utils/trpc";
+import { LoadingPage } from "./loading";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
@@ -9,7 +10,7 @@ dayjs.extend(relativeTime);
 const ExploreView = () => {
   const { data, isLoading } = trpc.home.explore.useQuery();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingPage />;
 
   if (!data) return null;
 
@@ -18,7 +19,7 @@ const ExploreView = () => {
   return (
     <div className="ml-4">
       {data.map((log) => (
-        <div className="mb-10 flex items-center gap-x-2">
+        <div key={log.log_id} className="mb-10 flex items-center gap-x-2">
           <Link
             href={`/u/${log.user.username}`}
             className="btn-ghost btn-circle avatar btn hover:ring hover:ring-primary hover:ring-offset-base-100"

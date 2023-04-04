@@ -4,6 +4,7 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import SwitchTheme from "../../components/SwitchTheme";
+import { LoadingPage } from "../../components/loading";
 
 const LogIn = () => {
   const router = useRouter();
@@ -11,7 +12,7 @@ const LogIn = () => {
 
   // loading state
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <LoadingPage />;
   }
 
   // if the user is logged in, redirect to home page

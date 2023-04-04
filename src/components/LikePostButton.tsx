@@ -11,10 +11,19 @@ interface Props {
 
 const LikePostButton: React.FC<Props> = ({ postId }) => {
   const [liked, setLiked] = useState(false);
+  const ctx = trpc.useContext();
   const router = useRouter();
   const { data: session } = useSession();
-  const likeMutation = trpc.post.like.useMutation();
-  const unlikeMutation = trpc.post.unlike.useMutation();
+  const likeMutation = trpc.post.like.useMutation({
+    onSuccess: () => {
+      void ctx.post.getAllLikes.invalidate();
+    },
+  });
+  const unlikeMutation = trpc.post.unlike.useMutation({
+    onSuccess: () => {
+      void ctx.post.getAllLikes.invalidate();
+    },
+  });
   const userLikeQuery = trpc.post.getUserLike.useQuery({ postId: postId });
 
   // Fetch user's like status for this log

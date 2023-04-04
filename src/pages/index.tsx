@@ -4,13 +4,14 @@ import SwitchTheme from "../components/SwitchTheme";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { LoadingPage } from "../components/loading";
 
 const LandingPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <LoadingPage />;
   }
 
   return (

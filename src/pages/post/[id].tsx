@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -15,6 +15,7 @@ import formatDate from "../../utils/formatDate";
 import CommentSection from "../../components/CommentSection";
 import LikePostButton from "../../components/LikePostButton";
 import UsersLikedPostModal from "../../components/UsersLikedPostModal";
+import { LoadingPage } from "../../components/loading";
 
 const Post = (props: { post: Post }) => {
   const [likeCount, setLikeCount] = useState(0);
@@ -30,7 +31,7 @@ const Post = (props: { post: Post }) => {
   const log = props.post.logs?.[0];
 
   // wait until we have the user data before rendering the page
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingPage />;
 
   // if the log doesn't exist, return a 404 page (TODO)
   if (!props.post) return <div>Post not found</div>;

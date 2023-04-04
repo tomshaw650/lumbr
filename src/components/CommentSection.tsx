@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { trpc } from "../utils/trpc";
 import Comments from "./Comments";
+import { LoadingSpinner } from "./loading";
 
 const CommentSection: React.FC = () => {
   const [error, setError] = useState("");
@@ -21,7 +22,7 @@ const CommentSection: React.FC = () => {
       postId: !isLogSection ? id : undefined,
     });
 
-  if (commentsLoading) return <div>Loading...</div>;
+  if (commentsLoading) return <LoadingSpinner />;
 
   return (
     <div className="mt-8">

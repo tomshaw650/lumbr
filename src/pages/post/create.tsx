@@ -7,6 +7,7 @@ import { Formik, Form, Field } from "formik";
 import Head from "next/head";
 import NavBar from "../../components/NavBar";
 import MarkdownEditor from "../../components/MarkdownEditor";
+import { LoadingPage } from "../../components/loading";
 
 interface inputValues {
   title: string;
@@ -31,7 +32,7 @@ const CreatePost: NextPage = () => {
     router.push("/auth/login");
   }
 
-  if (userLoading || logsLoading) return <div>Loading...</div>;
+  if (userLoading || logsLoading) return <LoadingPage />;
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(event.target.value);

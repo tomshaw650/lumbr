@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import NavBar from "../../components/NavBar";
 import { trpc } from "../../utils/trpc";
 import { Formik, Form, Field } from "formik";
+import { LoadingPage } from "../../components/loading";
 
 interface inputValues {
   title: string;
@@ -23,7 +24,7 @@ const CreateLog: NextPage = () => {
     router.push("/auth/login");
   }
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingPage />;
 
   return (
     <div>
@@ -65,7 +66,7 @@ const CreateLog: NextPage = () => {
                 </p>
                 <button
                   type="button"
-                  className="btn-ghost btn-circle btn-sm btn text-lg font-extrabold"
+                  className="btn-ghost btn-sm btn-circle btn text-lg font-extrabold"
                   onClick={() => setError(null)}
                 >
                   X
