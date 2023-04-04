@@ -1,12 +1,13 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import type { User } from "@prisma/client";
+import type { User } from "next-auth";
+import type { User as PrismaUser } from "@prisma/client";
 import { signOut } from "next-auth/react";
 import SwitchTheme from "./SwitchTheme";
 
 interface Props {
-  user: User | null | undefined;
+  user: User | PrismaUser | null | undefined;
 }
 
 const NavBar: React.FC<Props> = React.memo(({ user }) => {

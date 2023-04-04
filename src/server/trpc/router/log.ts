@@ -182,4 +182,26 @@ export const logRouter = router({
       });
       return logTags;
     }),
+
+  getLogsByUserId: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const logs = await prisma.log.findMany({
+        where: {
+          user_id: input.userId,
+        },
+        include: {
+          log_tags: {
+            include: {
+              tag: true,
+            },
+          },
+        },
+      });
+      return logs;
+    }),
 });

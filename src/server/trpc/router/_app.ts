@@ -2,6 +2,7 @@ import { router } from "../trpc";
 import { authRouter } from "./auth";
 import { userRouter } from "./user";
 import { homeRouter } from "./home";
+import { profileRouter } from "./profile";
 import { logRouter } from "./log";
 import { postRouter } from "./post";
 import { commentRouter } from "./comment";
@@ -10,6 +11,7 @@ export const appRouter = router({
   auth: authRouter,
   user: userRouter,
   home: homeRouter,
+  profile: profileRouter,
   log: logRouter,
   post: postRouter,
   comment: commentRouter,
