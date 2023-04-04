@@ -9,7 +9,7 @@ import { prisma } from "../../server/db/client";
 import superjson from "superjson";
 import { trpc } from "../../utils/trpc";
 import { useSession } from "next-auth/react";
-import { LoadingSpinner } from "../../components/loading";
+import { LoadingPage } from "../../components/loading";
 import { SiAddthis } from "react-icons/si";
 import formatDate from "../../utils/formatDate";
 
@@ -30,7 +30,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
     userId: user?.id,
   });
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) return <LoadingPage />;
 
   return (
     <div>
@@ -87,7 +87,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
         </section>
         <section className="col-span-8 p-10">
           <div className="flex items-center gap-x-2">
-            <h3 className="mb-5 p-2 text-3xl">{user.username}'s logs</h3>
+            <h3 className="mb-5 p-2 text-3xl">{user.username}&apos;s logs</h3>
             {session?.user?.id === user.id && (
               <Link href="/log/create">
                 <SiAddthis className="mb-5 text-xl hover:text-primary" />
