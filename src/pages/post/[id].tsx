@@ -73,12 +73,12 @@ const Post = (props: { post: Post }) => {
           );
         })}
       </div>
-      <div className="mx-auto mt-10 flex max-w-xs flex-col items-center rounded-md border-2 border-black border-opacity-20 py-2 sm:max-w-md">
+      <div className="mx-auto mt-10 flex max-w-xs flex-col items-center rounded-md border-2 border-black border-opacity-20 bg-white py-2 dark:bg-inherit sm:max-w-md">
         <h1 className="text-2xl font-bold">{props.post.title}</h1>
         <p className="text-sm text-gray-500">
           by{" "}
           <Link
-            className="underline hover:font-bold"
+            className="font-bold text-primary underline hover:font-extrabold"
             href={`/u/${props.post.user.username}`}
           >
             {props.post.user.username}
@@ -86,7 +86,7 @@ const Post = (props: { post: Post }) => {
         </p>
         <p>{formatDate(props.post.created_at)}</p>
       </div>
-      <div className="prose-sm mx-auto mt-5 flex max-w-xs flex-col rounded-md border-2 border-black border-opacity-20 bg-white p-5 dark:bg-inherit sm:max-w-4xl sm:prose md:prose-lg lg:prose-xl">
+      <div className="prose-sm mx-auto mt-5 flex max-w-xs flex-col rounded-md border-2 border-black border-opacity-20 bg-white p-5 hover:prose-a:text-primary dark:bg-inherit sm:max-w-4xl sm:prose md:prose-lg lg:prose-xl">
         <ReactMarkdown
           children={props.post.content}
           components={{

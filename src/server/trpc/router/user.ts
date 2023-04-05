@@ -13,6 +13,7 @@ export const userRouter = router({
     });
     return user;
   }),
+
   getAllLogs: protectedProcedure.query(async ({ ctx }) => {
     const logs = await prisma.log.findMany({
       where: {
@@ -21,6 +22,7 @@ export const userRouter = router({
     });
     return logs;
   }),
+
   // getUserPublic query to get user data from prisma, only trying once
   getUserPublic: publicProcedure.query(async ({ ctx }) => {
     try {
@@ -36,6 +38,7 @@ export const userRouter = router({
       return null;
     }
   }),
+
   // update mutation to add name, username and interests to user
   update: protectedProcedure
     .input(
@@ -64,6 +67,7 @@ export const userRouter = router({
           message: "Username cannot contain any whitespace!",
         });
       }
+
       const user = await prisma.user.update({
         where: {
           id: ctx?.session?.user?.id,
@@ -79,6 +83,79 @@ export const userRouter = router({
                 },
               },
             })),
+          },
+        },
+      });
+      return user;
+    }),
+
+  getInterests: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const interests = await prisma.userTag.findMany({
+        where: {
+          user_id: input.userId,
+        },
+        include: {
+          tag: true,
+        },
+      });
+      return interests;
+    }),
+
+  removeTagFromUser: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        tagId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const userTag = await prisma.userTag.findUnique({
+        where: {
+          user_id_tag_id: {
+            user_id: input.userId,
+            tag_id: input.tagId,
+          },
+        },
+      });
+
+      if (userTag) {
+        await prisma.userTag.delete({
+          where: {
+            user_id_tag_id: {
+              user_id: input.userId,
+              tag_id: input.tagId,
+            },
+          },
+        });
+      }
+      return userTag;
+    }),
+
+  addTagToUser: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        interests: z.array(
+          z.object({
+            tag_id: z.string(),
+          })
+        ),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const user = await prisma.user.update({
+        where: {
+          id: input.userId,
+        },
+        data: {
+          interests: {
+            create: input.interests,
           },
         },
       });

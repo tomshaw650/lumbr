@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  input,
+  select {
+    @apply dark:text-black;
+  }
+}
+
 @layer components {
   .md-editor-wrapper {
     width: 90vw;

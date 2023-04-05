@@ -13,6 +13,10 @@ const SwitchTheme = () => {
   useEffect(() => {
     const html = document.querySelector("html");
     html?.setAttribute("data-theme", theme);
+    html?.classList.replace(
+      theme === "dark" ? "lumbr" : "dark",
+      theme === "dark" ? "dark" : "lumbr"
+    );
   }, [theme]);
 
   return (

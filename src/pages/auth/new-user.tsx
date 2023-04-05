@@ -115,10 +115,7 @@ const NewUser: NextPage = () => {
         }}
       >
         {({ isSubmitting }) => (
-          <Form
-            ref={animationParent}
-            className="flex items-center justify-around"
-          >
+          <Form className="flex items-center justify-around">
             {error && (
               <div className="alert alert-error absolute -top-12 z-10 max-w-md shadow-lg">
                 <p>
@@ -126,7 +123,7 @@ const NewUser: NextPage = () => {
                 </p>
                 <button
                   type="button"
-                  className="btn-ghost btn-sm btn-circle btn text-lg font-extrabold"
+                  className="btn-ghost btn-circle btn-sm btn text-lg font-extrabold"
                   onClick={() => setError(null)}
                 >
                   X
