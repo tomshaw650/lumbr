@@ -12,16 +12,21 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         const suspendedUser = await prisma.user.findUnique({
           where: { email: user.email! },
-          select: { suspended: true, suspendReason: true },
+          select: { suspended: true, suspendReason: true, suspendDate: true },
         });
         if (suspendedUser?.suspended) {
           if (suspendedUser.suspendReason) {
             throw new Error(
               "Your account has been suspended. Reason: " +
-                suspendedUser.suspendReason
+                suspendedUser.suspendReason +
+                " You will be unsuspended on " +
+                suspendedUser.suspendDate
             );
           } else {
-            throw new Error("Your account has been suspended.");
+            throw new Error(
+              "Your account has been suspended. You will be unsuspended on " +
+                suspendedUser.suspendDate
+            );
           }
         }
       }
@@ -51,6 +56,7 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     newUser: "/auth/new-user",
+    error: "/auth/error",
   },
   debug: true,
 };
