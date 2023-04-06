@@ -8,6 +8,25 @@ import { prisma } from "../../../server/db/client";
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
+    async signIn({ user }) {
+      if (user) {
+        const suspendedUser = await prisma.user.findUnique({
+          where: { email: user.email! },
+          select: { suspended: true, suspendReason: true },
+        });
+        if (suspendedUser?.suspended) {
+          if (suspendedUser.suspendReason) {
+            throw new Error(
+              "Your account has been suspended. Reason: " +
+                suspendedUser.suspendReason
+            );
+          } else {
+            throw new Error("Your account has been suspended.");
+          }
+        }
+      }
+      return true;
+    },
     session({ session, user }) {
       if (session.user) {
         // store the user id and role in every session
