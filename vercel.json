@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/server/cron/suspend",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}
