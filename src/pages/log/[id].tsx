@@ -2,9 +2,13 @@ import { useEffect, useState } from "react";
 import type { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { toast } from "react-hot-toast";
 import { prisma } from "../../server/db/client";
 import { trpc } from "../../utils/trpc";
 import { Log } from "../../types/prisma";
+import { Formik, Form, Field } from "formik";
 import NavBar from "../../components/NavBar";
 import BackLink from "../../components/BackLink";
 import { Post } from "@prisma/client";
@@ -13,6 +17,74 @@ import LikeLogButton from "../../components/LikeLogButton";
 import UsersLikedLogModal from "../../components/UsersLikedLogModal";
 import AddTagsModal from "../../components/AddTagsModal";
 import { LoadingPage } from "../../components/loading";
+
+interface reportProps {
+  logId: string;
+  userId: string;
+}
+
+const ReportModal = ({ logId, userId }: reportProps) => {
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  const report = trpc.log.report.useMutation({
+    onSuccess: () => {
+      toast.success("Report sent.");
+      router.reload();
+    },
+    onError: (err) => {
+      const message = err.data?.zodError?.fieldErrors.content;
+      if (message && message[0]) {
+        toast.error(message[0]);
+      } else {
+        toast.error("Something went wrong");
+      }
+    },
+  });
+
+  if (!session?.user) {
+    return <div>404</div>;
+  }
+
+  return (
+    <Formik
+      initialValues={{
+        logId: logId,
+        reporterId: session.user?.id,
+        userId: userId,
+        reason: "",
+      }}
+      onSubmit={async (values) => {
+        await report.mutateAsync(values);
+      }}
+    >
+      <Form className="flex flex-col">
+        <label className="label" htmlFor="reason">
+          <span className="label-text">
+            Why do you want to report this log?
+          </span>
+          <span
+            className="tooltip tooltip-left tooltip-primary"
+            data-tip="Please add a reason for the report. Minimum 2 characters; maximum 60 charaters."
+          >
+            (?)
+          </span>
+        </label>
+        <Field
+          className="input-bordered input bg-white"
+          name="reason"
+          type="text"
+        />
+        <button
+          className="btn my-5 w-fit bg-red-600 text-white hover:bg-red-700"
+          type="submit"
+        >
+          Send Report
+        </button>
+      </Form>
+    </Formik>
+  );
+};
 
 const Log = (props: { log: Log }) => {
   const [likeCount, setLikeCount] = useState(0);
@@ -106,7 +178,26 @@ const Log = (props: { log: Log }) => {
           </div>
         </div>
         <p className="mt-5 max-w-sm text-center">{props.log.description}</p>
+        <label
+          htmlFor="report"
+          className="btn mt-2 bg-red-600 text-white hover:bg-red-700"
+        >
+          Report
+        </label>
+        <input type="checkbox" id="report" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="text-lg font-bold">Report {props.log.title}</h3>
+            <ReportModal logId={props.log.log_id} userId={props.log.user_id} />
+            <div className="modal-action">
+              <label htmlFor="report" className="btn-circle btn">
+                X
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
+
       <div className="divider mt-5" />
       {data?.username === props.log.user.username && (
         <div className="flex justify-center">

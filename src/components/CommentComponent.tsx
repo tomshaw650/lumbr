@@ -43,7 +43,7 @@ const CommentComponent = ({ comment }: { comment: Comment }) => {
             </div>
           ) : (
             <button
-              className="btn-error btn-sm btn w-fit"
+              className="btn-sm btn w-fit bg-red-600 hover:bg-red-700"
               onClick={handleDelete}
             >
               Delete

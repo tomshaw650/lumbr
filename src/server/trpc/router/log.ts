@@ -204,4 +204,43 @@ export const logRouter = router({
       });
       return logs;
     }),
+
+  report: protectedProcedure
+    .input(
+      z.object({
+        logId: z.string(),
+        reporterId: z.string(),
+        userId: z.string(),
+        reason: z
+          .string()
+          .min(2, { message: "Reason must be 2 characters or more." })
+          .max(60, { message: "Reason must be shorter than 60 characters." }),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const existingReport = await prisma.report.findFirst({
+        where: {
+          log_id: input.logId,
+          reporter_id: ctx?.session?.user?.id,
+          user_id: input.userId,
+        },
+      });
+
+      if (existingReport) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `You already reported this log.`,
+        });
+      }
+
+      const report = await prisma.report.create({
+        data: {
+          log_id: input.logId,
+          reporter_id: ctx?.session?.user?.id,
+          user_id: input.userId,
+          reason: input.reason,
+        },
+      });
+      return report;
+    }),
 });
