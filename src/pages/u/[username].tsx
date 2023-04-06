@@ -225,15 +225,13 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const { data: navUser, isLoading: userIsLoading } =
     trpc.user.getUser.useQuery();
   const { data: session } = useSession();
+
+  if (!user) return <div>404</div>;
   const { data: logs, isLoading } = trpc.log.getLogsByUserId.useQuery({
     userId: user?.id,
   });
 
-  if (userIsLoading) return <LoadingPage />;
-
-  if (!user) return <div>404</div>;
-
-  if (isLoading) return <LoadingPage />;
+  if (isLoading || userIsLoading) return <LoadingPage />;
 
   return (
     <div>
