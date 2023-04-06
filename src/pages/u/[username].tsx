@@ -222,7 +222,12 @@ const EditProfileModal = (user: any) => {
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const { data: user } = trpc.profile.getUserByUsername.useQuery({ username });
+  const { data: navUser, isLoading: userIsLoading } =
+    trpc.user.getUser.useQuery();
   const { data: session } = useSession();
+
+  if (userIsLoading) return <LoadingPage />;
+
   if (!user) return <div>404</div>;
 
   const { data: logs, isLoading } = trpc.log.getLogsByUserId.useQuery({
@@ -238,7 +243,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
         <meta name="description" content="Lumbr" />
       </Head>
 
-      <NavBar user={session?.user} />
+      <NavBar user={navUser} />
       <div className="grid grid-cols-10">
         <section className="sticky col-span-2 flex h-screen flex-col border-r-2 border-neutral border-opacity-50">
           <div className="mt-16 p-2">
