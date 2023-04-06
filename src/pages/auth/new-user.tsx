@@ -12,20 +12,15 @@ import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
 
-import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { trpc } from "../../utils/trpc";
 
 import { Formik, Form, Field } from "formik";
+import { toast } from "react-hot-toast";
 import SwitchTheme from "../../components/SwitchTheme";
 import { LoadingPage } from "../../components/loading";
 
 const NewUser: NextPage = () => {
-  // initialise some state
-  const [error, setError] = useState<null | string>(null);
-  const [animationParent] = useAutoAnimate();
-
   // initialise the router and trpc queries
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -89,7 +84,7 @@ const NewUser: NextPage = () => {
 
           // if first name or last name is empty, set error
           if (values.firstName === "" || values.lastName === "") {
-            setError("First name and last name cannot be empty.");
+            toast.error("First name and last name cannot be empty.");
             return;
           }
 
@@ -110,26 +105,12 @@ const NewUser: NextPage = () => {
             .catch((err) => {
               const message = err.message;
               const error = JSON.parse(message);
-              setError(error[0]?.message);
+              toast.error(error[0]?.message);
             });
         }}
       >
         {({ isSubmitting }) => (
           <Form className="flex items-center justify-around">
-            {error && (
-              <div className="alert alert-error absolute -top-12 z-10 max-w-md shadow-lg">
-                <p>
-                  <span className="font-bold">Error:</span> {error}
-                </p>
-                <button
-                  type="button"
-                  className="btn-ghost btn-circle btn-sm btn text-lg font-extrabold"
-                  onClick={() => setError(null)}
-                >
-                  X
-                </button>
-              </div>
-            )}
             <div className="form-control max-w-xs lg:max-w-md">
               <label className="label" htmlFor="name">
                 <span className="label-text">What is your name?</span>

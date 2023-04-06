@@ -1,11 +1,12 @@
 import type { NextPage } from "next";
-import { useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import NavBar from "../../components/NavBar";
 import { trpc } from "../../utils/trpc";
 import { Formik, Form, Field } from "formik";
+import { toast } from "react-hot-toast";
 import { LoadingPage } from "../../components/loading";
+import { toASCII } from "punycode";
 
 interface inputValues {
   title: string;
@@ -13,7 +14,6 @@ interface inputValues {
 }
 
 const CreateLog: NextPage = () => {
-  const [error, setError] = useState<null | string>(null);
   const router = useRouter();
   const { data: session, status } = useSession();
   const { data, isLoading } = trpc.user.getUser.useQuery();
@@ -36,7 +36,7 @@ const CreateLog: NextPage = () => {
         initialValues={{ title: "", description: "" }}
         onSubmit={async (values: inputValues, { setSubmitting }) => {
           if (values.title.length < 2 || values.title.length > 20) {
-            setError("Log title must be between 2-20 characters");
+            toast.error("Log title must be between 2-20 characters");
             return;
           }
           // check for trpcerror and set error
@@ -53,26 +53,12 @@ const CreateLog: NextPage = () => {
             })
             .catch((err) => {
               const message = err.message;
-              setError(message);
+              toast.error(message);
             });
         }}
       >
         {({ isSubmitting }) => (
           <Form className="mt-20 flex flex-col items-center">
-            {error && (
-              <div className="alert alert-error absolute z-10 max-w-md shadow-lg">
-                <p>
-                  <span className="font-bold">Error:</span> {error}
-                </p>
-                <button
-                  type="button"
-                  className="btn-ghost btn-sm btn-circle btn text-lg font-extrabold"
-                  onClick={() => setError(null)}
-                >
-                  X
-                </button>
-              </div>
-            )}
             <div className="form-control">
               <label className="label" htmlFor="title">
                 <span className="label-text">Enter the name of the Log</span>

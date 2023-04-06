@@ -1,7 +1,6 @@
 import type { Comment } from "../types/prisma";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import formatDate from "../utils/formatDate";
 import { trpc } from "../utils/trpc";
 import { useState } from "react";
@@ -10,7 +9,7 @@ import { useSession } from "next-auth/react";
 const CommentComponent = ({ comment }: { comment: Comment }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const { data: session } = useSession();
-  const router = useRouter();
+  const ctx = trpc.useContext();
 
   const dlt = trpc.comment.delete.useMutation();
 
@@ -22,7 +21,7 @@ const CommentComponent = ({ comment }: { comment: Comment }) => {
 
   const confirmDelete = async () => {
     await dlt.mutateAsync({ comment_id: comment.comment_id }).then(() => {
-      router.reload();
+      void ctx.comment.getAll.invalidate();
     });
   };
 

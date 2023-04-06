@@ -1,17 +1,31 @@
 import { Formik, Form, Field } from "formik";
-import { useState } from "react";
 import { useRouter } from "next/router";
 import { trpc } from "../utils/trpc";
 import Comments from "./Comments";
+import { toast } from "react-hot-toast";
 import { LoadingSpinner } from "./loading";
 
 const CommentSection: React.FC = () => {
-  const [error, setError] = useState("");
   const router = useRouter();
+  const ctx = trpc.useContext();
   const id = router.query.id as string | undefined;
 
   const user = trpc.user.getUser.useQuery();
-  const create = trpc.comment.create.useMutation();
+  const create = trpc.comment.create.useMutation({
+    onSuccess: () => {
+      toast.success("Comment posted!");
+      ctx.comment.getAll.invalidate();
+    },
+    onError: (err) => {
+      const errorMessage = err.data?.zodError?.formErrors;
+      if (errorMessage && errorMessage[0]) {
+        toast.error(errorMessage[0]);
+      } else {
+        console.log(errorMessage);
+        toast.error("Failed to post! Please try again later.");
+      }
+    },
+  });
 
   const isLogSection = router.pathname.startsWith("/log/");
 
@@ -30,7 +44,7 @@ const CommentSection: React.FC = () => {
         <h3 className="mb-2 text-lg font-medium">Add a comment:</h3>
         <Formik
           initialValues={{ body: "" }}
-          onSubmit={async (values, { setSubmitting, resetForm, setErrors }) => {
+          onSubmit={async (values, { setSubmitting, resetForm }) => {
             setSubmitting(false);
             await create
               .mutateAsync({
@@ -41,7 +55,6 @@ const CommentSection: React.FC = () => {
               })
               .then(() => {
                 resetForm();
-                router.reload();
               });
           }}
         >

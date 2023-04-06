@@ -1,10 +1,11 @@
 import type { NextPage } from "next";
+import Head from "next/head";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../utils/trpc";
+import { toast } from "react-hot-toast";
 import { Formik, Form, Field } from "formik";
-import Head from "next/head";
 import NavBar from "../../components/NavBar";
 import MarkdownEditor from "../../components/MarkdownEditor";
 import { LoadingPage } from "../../components/loading";
@@ -17,7 +18,6 @@ interface inputValues {
 
 const CreatePost: NextPage = () => {
   const [value, setValue] = useState("");
-  const [error, setError] = useState<null | string>(null);
   const router = useRouter();
   const { data: session, status } = useSession();
   const { data: userData, isLoading: userLoading } =
@@ -51,11 +51,11 @@ const CreatePost: NextPage = () => {
         initialValues={{ title: "", content: "", log_id: "" }}
         onSubmit={async (values: inputValues, { setSubmitting }) => {
           if (values.title.length < 2 || values.title.length > 30) {
-            setError("Post title must be between 2-30 characters");
+            toast.error("Post title must be between 2-30 characters");
             return;
           }
           if (!values.log_id) {
-            setError("Please select a log");
+            toast.error("Please select a log");
             return;
           }
 
@@ -72,26 +72,12 @@ const CreatePost: NextPage = () => {
             })
             .catch((err) => {
               const message = err.message;
-              setError(message);
+              toast.error(message);
             });
         }}
       >
         {({ isSubmitting }) => (
           <Form className="mt-20 flex flex-col items-center">
-            {error && (
-              <div className="alert alert-error absolute z-10 max-w-md shadow-lg">
-                <p>
-                  <span className="font-bold">Error:</span> {error}
-                </p>
-                <button
-                  type="button"
-                  className="btn-ghost btn-sm btn-circle btn text-lg font-extrabold"
-                  onClick={() => setError(null)}
-                >
-                  X
-                </button>
-              </div>
-            )}
             <div className="form-control">
               <label className="label" htmlFor="log">
                 <span className="label-text">Select a Log:</span>

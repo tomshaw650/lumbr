@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Formik, Form, Field } from "formik";
 import { trpc } from "../utils/trpc";
+import { toast } from "react-hot-toast";
 
 interface Props {
   logId: string;
@@ -9,7 +10,6 @@ interface Props {
 
 const AddTagsModal: React.FC<Props> = ({ logId }) => {
   const router = useRouter();
-  const [error, setError] = useState("");
   const tags = trpc.auth.getAllTags.useQuery();
   const addTags = trpc.log.addTagsToLog.useMutation();
   const removeTags = trpc.log.removeTagFromLog.useMutation();
@@ -25,8 +25,7 @@ const AddTagsModal: React.FC<Props> = ({ logId }) => {
           setSubmitting(false);
 
           if (values.log_tags.length > 5) {
-            setError("You can only select up to 5 tags.");
-            return;
+            toast.error("You can only select up to 5 tags.");
           }
 
           // Create an array of tag IDs that were selected in the form
@@ -66,30 +65,18 @@ const AddTagsModal: React.FC<Props> = ({ logId }) => {
                 router.reload();
               })
               .catch((err) => {
-                const message = err.message;
-                const error = JSON.parse(message);
-                setError(error[0]?.message);
+                const errorMessage = err.data?.zodError?.fieldErrors.content;
+                if (errorMessage && errorMessage[0]) {
+                  toast.error(errorMessage[0]);
+                } else {
+                  toast.error("Failed to update! Please try again later.");
+                }
               });
           }
         }}
       >
         {({ isSubmitting }) => (
           <Form className="flex flex-col">
-            {error !== "" && (
-              <div className="alert alert-error absolute z-10 max-w-md shadow-lg">
-                <p>
-                  <span className="font-bold">Error:</span> {error}
-                </p>
-                <button
-                  type="button"
-                  className="btn-ghost btn-sm btn-circle btn text-lg font-extrabold"
-                  onClick={() => setError("")}
-                >
-                  <span className="sr-only">Close alert</span>
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-            )}
             <label className="label" htmlFor="log_tags">
               <span className="label-text">Please select up to 5 tags.</span>
             </label>
