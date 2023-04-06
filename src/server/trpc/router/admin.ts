@@ -7,12 +7,12 @@ export const adminRouter = router({
     const reports = await prisma.report.findMany({
       include: {
         log: true,
-        reporter: {
+        reporter_user: {
           select: {
             username: true,
           },
         },
-        user: {
+        reported_user: {
           select: {
             username: true,
           },

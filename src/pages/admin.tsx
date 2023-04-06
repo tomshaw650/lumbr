@@ -43,9 +43,7 @@ const SuspendUserModal = ({ userId, logId }: modalProps) => {
         suspendReason: "",
       }}
       onSubmit={async (values) => {
-        await suspend.mutateAsync(values).then(() => {
-          console.log(values);
-        });
+        await suspend.mutateAsync(values);
       }}
     >
       <Form className="flex flex-col">
@@ -162,13 +160,13 @@ const Admin = () => {
                       <li className="font-bold">
                         Reporter:{" "}
                         <span className="font-normal">
-                          {report.reporter.username}
+                          {report.reporter_user.username}
                         </span>
                       </li>
                       <li className="font-bold">
                         Reported:{" "}
                         <span className="font-normal">
-                          {report.user.username}
+                          {report.reported_user.username}
                         </span>
                       </li>
                       <li className="font-bold">
@@ -203,7 +201,7 @@ const Admin = () => {
                       <div className="modal">
                         <div className="modal-box">
                           <h3 className="text-lg font-bold">
-                            Suspend {report.user.username}?
+                            Suspend {report.reported_user.username}?
                           </h3>
                           <SuspendUserModal
                             userId={report.user_id}
