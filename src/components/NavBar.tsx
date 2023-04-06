@@ -32,14 +32,21 @@ const NavBar: React.FC<Props> = React.memo(({ user }) => {
             className="input-bordered input ml-2 w-full bg-white focus:pr-40"
           />
         </li>
-        <div className="mr-5 ml-5 flex gap-x-4 md:ml-20">
+        <ul className="mr-5 ml-5 flex gap-x-4 md:ml-20">
           <li className="font-bold hover:font-extrabold md:text-2xl">
             <Link href="/following">Following</Link>
           </li>
           <li className="font-bold hover:font-extrabold md:text-2xl">
             <Link href="/explore">Explore</Link>
           </li>
-        </div>
+          {user
+            ? user.role === "ADMIN" && (
+                <li className="font-bold text-emerald-700 hover:font-extrabold md:text-2xl">
+                  <Link href="/admin">Admin</Link>
+                </li>
+              )
+            : null}
+        </ul>
         <div className="ml-auto flex justify-end gap-x-5">
           <div className="hidden lg:block">
             <SwitchTheme />
