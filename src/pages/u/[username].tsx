@@ -266,7 +266,9 @@ const FollowCount = ({ user }: { user: User }) => {
       <input type="checkbox" id="followers" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box">
-          <h3 className="text-lg font-bold">{user.username}'s Followers:</h3>
+          <h3 className="text-lg font-bold">
+            {user.username}&apos;s Followers:
+          </h3>
           <FollowersModal userId={user.id} />
           <div className="modal-action">
             <label htmlFor="followers" className="btn-circle btn">
