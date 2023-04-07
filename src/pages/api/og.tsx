@@ -41,7 +41,7 @@ const handler: NextApiHandler = async (req: NextApiRequest) => {
       </div>
     ) : (
       <div tw="flex items-center justify-center h-screen w-full">
-        <h1 tw="text-4xl font-bold">Log doesn't exist!</h1>
+        <h1 tw="text-4xl font-bold">Log doesn&apos;t exist!</h1>
       </div>
     );
 
