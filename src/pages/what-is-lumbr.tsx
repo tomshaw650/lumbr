@@ -1,10 +1,23 @@
 import { useRouter } from "next/router";
+import Link from "next/link";
+import Image from "next/image";
+import SwitchTheme from "../components/SwitchTheme";
 
 const WhatIsLumbr = () => {
   const router = useRouter();
 
   return (
     <div className="flex h-screen flex-col items-center justify-center">
+      <nav className="navbar flex">
+        <div className="flex-none">
+          <Link href="/" className="btn-ghost btn-circle btn ml-10">
+            <Image src="/lumbr.png" alt="Lumbr logo" width="100" height="100" />
+          </Link>
+        </div>
+        <div className="navbar-end flex-1 md:mr-10">
+          <SwitchTheme />
+        </div>
+      </nav>
       <h1 className="mb-8 text-4xl">What is Lumbr?</h1>
       <div className="max-w-2xl">
         <p className="mb-4">
