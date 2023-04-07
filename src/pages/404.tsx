@@ -1,7 +1,10 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
-import SwitchTheme from "../components/SwitchTheme";
+import dynamic from "next/dynamic";
+const SwitchTheme = dynamic(() => import("../components/SwitchTheme"), {
+  ssr: false,
+});
 
 const FourOhFour = () => {
   const router = useRouter();
@@ -29,7 +32,7 @@ const FourOhFour = () => {
             alt="Sad little robot"
             className="mx-auto h-64 w-64"
           />
-          <p className="mb-4">This page doesn't exist!</p>
+          <p className="mb-4">This page doesn&apos;t exist!</p>
           <button
             onClick={() => router.push("/")}
             className="btn-primary btn text-white"

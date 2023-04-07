@@ -4,7 +4,10 @@ import Image from "next/image";
 import type { User } from "next-auth";
 import type { User as PrismaUser } from "@prisma/client";
 import { signOut } from "next-auth/react";
-import SwitchTheme from "./SwitchTheme";
+import dynamic from "next/dynamic";
+const SwitchTheme = dynamic(() => import("../components/SwitchTheme"), {
+  ssr: false,
+});
 
 interface Props {
   user: User | PrismaUser | null | undefined;

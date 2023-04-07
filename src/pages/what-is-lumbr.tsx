@@ -1,7 +1,10 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
-import SwitchTheme from "../components/SwitchTheme";
+import dynamic from "next/dynamic";
+const SwitchTheme = dynamic(() => import("../components/SwitchTheme"), {
+  ssr: false,
+});
 
 const WhatIsLumbr = () => {
   const router = useRouter();
@@ -22,14 +25,14 @@ const WhatIsLumbr = () => {
       <div className="max-w-2xl">
         <p className="mb-4">
           Lumbr is a project by me, Tom Shaw, to act as my project deliverable
-          of my Bachelor's Degree dissertation.
+          of my Bachelor&apos;s Degree dissertation.
         </p>
         <p className="mb-4">
           The basis is to improve and enrich developer interactions on the
-          internet. I've felt for a while that developers are missing a "home"
-          online, and merely settled across a few different spaces that don't
-          quite fit. I want to create a space that is tailored to developers,
-          and is a place where they can feel at home.
+          internet. I&apos;ve felt for a while that developers are missing a
+          "home" online, and merely settled across a few different spaces that
+          don&apos;t quite fit. I want to create a space that is tailored to
+          developers, and is a place where they can feel at home.
         </p>
         <h2 className="mb-4 text-2xl">So what do I do here?</h2>
         <p className="mb-4">
@@ -37,14 +40,15 @@ const WhatIsLumbr = () => {
           profile will be made for you. You can add some interests, and the
           homepage will show you logs tagged the same way. You can also start
           writing your own logs, which are made up of posts about a side
-          project, or a piece of work (that you're allowed to talk about!).
-          There's a comment section, so get discussing with others, make
+          project, or a piece of work (that you&apos;re allowed to talk about!).
+          There&apos;s a comment section, so get discussing with others, make
           friends, and be nice!
         </p>
         <p className="mb-4">
-          I really hope you enjoy your stay here, and that you'll give it a try.
-          This ultimately acts as a prototype and is not finished, but I'm proud
-          of what I made. I hope to read some logs other than mine!
+          I really hope you enjoy your stay here, and that you&apos;ll give it a
+          try. This ultimately acts as a prototype and is not finished, but
+          I&apos;m proud of what I made. I hope to read some logs other than
+          mine!
         </p>
         <p className="mb-4">Sound good?</p>
         <button

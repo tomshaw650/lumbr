@@ -87,6 +87,7 @@ const ReportModal = ({ logId, userId }: reportProps) => {
 };
 
 const Log = (props: { log: Log }) => {
+  const { data: session } = useSession();
   const [likeCount, setLikeCount] = useState(0);
   const { data, isLoading } = trpc.user.getUserPublic.useQuery();
   const allLikes = trpc.log.getAllLikes.useQuery({ logId: props.log.log_id });
@@ -178,24 +179,31 @@ const Log = (props: { log: Log }) => {
           </div>
         </div>
         <p className="mt-5 max-w-sm text-center">{props.log.description}</p>
-        <label
-          htmlFor="report"
-          className="btn mt-2 bg-red-600 text-white hover:bg-red-700"
-        >
-          Report
-        </label>
-        <input type="checkbox" id="report" className="modal-toggle" />
-        <div className="modal">
-          <div className="modal-box">
-            <h3 className="text-lg font-bold">Report {props.log.title}</h3>
-            <ReportModal logId={props.log.log_id} userId={props.log.user_id} />
-            <div className="modal-action">
-              <label htmlFor="report" className="btn-circle btn">
-                X
-              </label>
+        {session && data?.username !== props.log.user.username && (
+          <>
+            <label
+              htmlFor="report"
+              className="btn mt-2 bg-red-600 text-white hover:bg-red-700"
+            >
+              Report
+            </label>
+            <input type="checkbox" id="report" className="modal-toggle" />
+            <div className="modal">
+              <div className="modal-box">
+                <h3 className="text-lg font-bold">Report {props.log.title}</h3>
+                <ReportModal
+                  logId={props.log.log_id}
+                  userId={props.log.user_id}
+                />
+                <div className="modal-action">
+                  <label htmlFor="report" className="btn-circle btn">
+                    X
+                  </label>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
 
       <div className="divider mt-5" />

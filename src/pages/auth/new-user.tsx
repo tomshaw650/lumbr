@@ -17,8 +17,12 @@ import { trpc } from "../../utils/trpc";
 
 import { Formik, Form, Field } from "formik";
 import { toast } from "react-hot-toast";
-import SwitchTheme from "../../components/SwitchTheme";
 import { LoadingPage } from "../../components/loading";
+
+import dynamic from "next/dynamic";
+const SwitchTheme = dynamic(() => import("../../components/SwitchTheme"), {
+  ssr: false,
+});
 
 const NewUser: NextPage = () => {
   // initialise the router and trpc queries

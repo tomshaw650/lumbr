@@ -1,10 +1,14 @@
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import SwitchTheme from "../components/SwitchTheme";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { LoadingPage } from "../components/loading";
+
+import dynamic from "next/dynamic";
+const SwitchTheme = dynamic(() => import("../components/SwitchTheme"), {
+  ssr: false,
+});
 
 const LandingPage = () => {
   const { data: session, status } = useSession();

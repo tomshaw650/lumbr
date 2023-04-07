@@ -3,8 +3,12 @@ import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import SwitchTheme from "../../components/SwitchTheme";
 import { LoadingPage } from "../../components/loading";
+
+import dynamic from "next/dynamic";
+const SwitchTheme = dynamic(() => import("../../components/SwitchTheme"), {
+  ssr: false,
+});
 
 const LogIn = () => {
   const router = useRouter();
