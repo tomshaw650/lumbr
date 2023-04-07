@@ -120,6 +120,10 @@ const Log = (props: { log: Log }) => {
         <title>
           Lumbr | {props.log.user.username} - {props.log.title}
         </title>
+        <meta
+          property="og:image"
+          content={`https://lumbr.dev/api/og?logId=${props.log.log_id}`}
+        />
       </Head>
       <NavBar user={data} />
       <div className="ml-5 mt-2 flex">

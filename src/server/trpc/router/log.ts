@@ -38,7 +38,24 @@ export const logRouter = router({
           description: input.description,
         },
       });
+      return log;
+    }),
 
+  getLogById: publicProcedure
+    .input(
+      z.object({
+        logId: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const log = await prisma.log.findUnique({
+        where: {
+          log_id: input.logId,
+        },
+        include: {
+          user: true,
+        },
+      });
       return log;
     }),
 
