@@ -233,8 +233,6 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
 
   if (isLoading || userIsLoading) return <LoadingPage />;
 
-  console.log(new Date().toISOString());
-
   return (
     <div>
       <Head>

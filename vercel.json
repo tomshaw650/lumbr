@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/server/cron/suspend",
+      "path": "/api/cron/suspend",
       "schedule": "0 0 * * *"
     }
   ]
