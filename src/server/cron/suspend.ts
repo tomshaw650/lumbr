@@ -1,8 +1,4 @@
-// suspendedUsers.ts
-
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../db/client";
 
 export const getSuspendedUsers = async () => {
   const suspendedUsers = await prisma.user.findMany({
@@ -11,6 +7,8 @@ export const getSuspendedUsers = async () => {
       suspendDate: new Date().toISOString(),
     },
   });
+
+  console.log("suspended users", suspendedUsers);
 
   return suspendedUsers;
 };
