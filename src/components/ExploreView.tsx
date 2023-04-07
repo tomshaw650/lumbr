@@ -14,8 +14,6 @@ const ExploreView = () => {
 
   if (!data) return null;
 
-  console.log(data);
-
   return (
     <div className="ml-4">
       {data.map((log) => (

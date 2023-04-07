@@ -21,7 +21,6 @@ const CommentSection: React.FC = () => {
       if (errorMessage && errorMessage[0]) {
         toast.error(errorMessage[0]);
       } else {
-        console.log(errorMessage);
         toast.error("Failed to post! Please try again later.");
       }
     },
