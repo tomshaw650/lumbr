@@ -161,4 +161,92 @@ export const userRouter = router({
       });
       return user;
     }),
+
+  follow: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const follow = await prisma.follow.create({
+        data: {
+          followed_user_id: input.userId,
+          following_user_id: ctx?.session?.user?.id,
+        },
+      });
+      return follow;
+    }),
+
+  unfollow: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const follow = await prisma.follow.delete({
+        where: {
+          followed_user_id_following_user_id: {
+            followed_user_id: input.userId,
+            following_user_id: ctx?.session?.user?.id,
+          },
+        },
+      });
+      return follow;
+    }),
+
+  getFollowers: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const followers = await prisma.follow.findMany({
+        where: {
+          followed_user_id: input.userId,
+        },
+        include: {
+          following_user: true,
+        },
+      });
+      return followers;
+    }),
+
+  getFollowing: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const following = await prisma.follow.findMany({
+        where: {
+          following_user_id: input.userId,
+        },
+        include: {
+          followed_user: true,
+        },
+      });
+      return following;
+    }),
+
+  isFollowing: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const follow = await prisma.follow.findUnique({
+        where: {
+          followed_user_id_following_user_id: {
+            followed_user_id: input.userId,
+            following_user_id: ctx?.session?.user?.id,
+          },
+        },
+      });
+      return !!follow;
+    }),
 });

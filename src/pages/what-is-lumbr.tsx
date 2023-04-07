@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
@@ -11,6 +12,10 @@ const WhatIsLumbr = () => {
 
   return (
     <div className="flex h-screen flex-col items-center justify-center">
+      <Head>
+        <title>Lumbr | What is Lumbr?</title>
+        <meta name="description" content="What is Lumbr?" />
+      </Head>
       <nav className="navbar flex">
         <div className="flex-none">
           <Link href="/" className="btn-ghost btn-circle btn ml-10">

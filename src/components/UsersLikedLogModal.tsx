@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { trpc } from "../utils/trpc";
+import closeModal from "../utils/closeModal";
 
 interface Props {
   logId: string;
@@ -17,6 +18,7 @@ const UsersLikedLogModal: React.FC<Props> = ({ logId }) => {
           <Link
             href={`/u/${like.user.username}`}
             className="btn-ghost btn-circle avatar btn hover:ring hover:ring-primary hover:ring-offset-base-100"
+            onClick={() => closeModal()}
           >
             <Image
               priority={true}

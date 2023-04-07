@@ -7,6 +7,7 @@ import NavBar from "../../components/NavBar";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { appRouter } from "../../server/trpc/router/_app";
 import { prisma } from "../../server/db/client";
+import type { User } from "@prisma/client";
 import superjson from "superjson";
 import { trpc } from "../../utils/trpc";
 import { useSession } from "next-auth/react";
@@ -15,6 +16,9 @@ import { SiAddthis } from "react-icons/si";
 import formatDate from "../../utils/formatDate";
 import { Formik, Form, Field } from "formik";
 import { toast } from "react-hot-toast";
+import FollowersModal from "../../components/FollowersModal";
+import FollowingModal from "../../components/FollowingModal";
+import FourOhFour from "../404";
 
 const EditProfileModal = (user: any) => {
   const router = useRouter();
@@ -220,18 +224,113 @@ const EditProfileModal = (user: any) => {
   );
 };
 
+const FollowCount = ({ user }: { user: User }) => {
+  const { data: followers } = trpc.user.getFollowers.useQuery({
+    userId: user.id,
+  });
+  const { data: following } = trpc.user.getFollowing.useQuery({
+    userId: user.id,
+  });
+
+  return (
+    <div className="ml-5 flex items-center gap-x-2">
+      <div className="flex items-center">
+        <label
+          htmlFor="following"
+          className="text-md cursor-pointer text-slate-500 hover:underline"
+        >
+          {following?.length} following
+        </label>
+        <input type="checkbox" id="following" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="text-lg font-bold">
+              Users {user.username} follows:
+            </h3>
+            <FollowingModal userId={user.id} />
+            <div className="modal-action">
+              <label htmlFor="following" className="btn-circle btn">
+                X
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span className="text-xl text-slate-500">·</span>
+      <label
+        htmlFor="followers"
+        className="text-md cursor-pointer text-slate-500 hover:underline"
+      >
+        {followers?.length} followers
+      </label>
+      <input type="checkbox" id="followers" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box">
+          <h3 className="text-lg font-bold">{user.username}'s Followers:</h3>
+          <FollowersModal userId={user.id} />
+          <div className="modal-action">
+            <label htmlFor="followers" className="btn-circle btn">
+              X
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
+  const ctx = trpc.useContext();
+  const { data: session } = useSession();
+
   const { data: user } = trpc.profile.getUserByUsername.useQuery({ username });
   const { data: navUser, isLoading: userIsLoading } =
     trpc.user.getUser.useQuery();
-  const { data: session } = useSession();
+  const follow = trpc.user.follow.useMutation({
+    onSuccess: () => {
+      void ctx.user.getFollowers.invalidate();
+      void ctx.user.isFollowing.invalidate();
+    },
+    onError: (err) => {
+      if (err.data?.zodError?.formErrors && err.data?.zodError?.formErrors[0]) {
+        toast.error(err.data?.zodError?.formErrors[0]);
+      } else {
+        toast.error("Failed to follow user! Please try again later.");
+      }
+    },
+  });
+  const unfollow = trpc.user.unfollow.useMutation({
+    onSuccess: () => {
+      void ctx.user.getFollowers.invalidate();
+      void ctx.user.isFollowing.invalidate();
+    },
+    onError: (err) => {
+      if (err.data?.zodError?.formErrors && err.data?.zodError?.formErrors[0]) {
+        toast.error(err.data?.zodError?.formErrors[0]);
+      } else {
+        toast.error("Failed to unfollow user! Please try again later.");
+      }
+    },
+  });
 
-  if (!user) return <div>404</div>;
+  const followUser = (userId: string) => {
+    follow.mutateAsync({ userId: userId });
+  };
+
+  const unfollowUser = (userId: string) => {
+    unfollow.mutateAsync({ userId: userId });
+  };
+
+  if (!user) return <FourOhFour />;
   const { data: logs, isLoading } = trpc.log.getLogsByUserId.useQuery({
     userId: user?.id,
   });
+  const { data: isFollowing, isLoading: isFollowingLoading } =
+    trpc.user.isFollowing.useQuery({
+      userId: user?.id,
+    });
 
-  if (isLoading || userIsLoading) return <LoadingPage />;
+  if (isLoading || userIsLoading || isFollowingLoading) return <LoadingPage />;
 
   return (
     <div>
@@ -254,6 +353,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
             />
             <h1 className="ml-5 mt-3 text-3xl font-bold">{user.name}</h1>
             <h2 className="ml-5 text-xl">{user.username}</h2>
+            <FollowCount user={user} />
             {user.bio !== null && (
               <p className="mt-5 rounded border-2 border-neutral p-2">
                 {user.bio}
@@ -282,6 +382,26 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
                     </div>
                   </div>
                 </div>
+              </>
+            )}
+            {session && session?.user?.id !== user.id && (
+              <>
+                {!isFollowing && (
+                  <button
+                    className="btn-primary btn mt-5 text-white"
+                    onClick={() => followUser(user.id)}
+                  >
+                    Follow
+                  </button>
+                )}
+                {isFollowing && (
+                  <button
+                    className="btn-error btn mt-5 text-white"
+                    onClick={() => unfollowUser(user.id)}
+                  >
+                    Unfollow
+                  </button>
+                )}
               </>
             )}
           </div>
