@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import { trpc } from "../../utils/trpc";
 
 export const config = {
-  runtime: "edge",
+  runtime: "experimental-edge",
 };
 
 export default async function handler(req: NextRequest) {
