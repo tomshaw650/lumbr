@@ -17,6 +17,7 @@ import LikeLogButton from "../../components/LikeLogButton";
 import UsersLikedLogModal from "../../components/UsersLikedLogModal";
 import AddTagsModal from "../../components/AddTagsModal";
 import { LoadingPage } from "../../components/loading";
+import FourOhFour from "../404";
 
 interface reportProps {
   logId: string;
@@ -43,7 +44,7 @@ const ReportModal = ({ logId, userId }: reportProps) => {
   });
 
   if (!session?.user) {
-    return <div>404</div>;
+    return <FourOhFour />;
   }
 
   return (

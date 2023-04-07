@@ -3,13 +3,13 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { trpc } from "../utils/trpc";
-import NavBar from "../components/NavBar";
-import ExploreView from "../components/ExploreView";
+import { trpc } from "../../utils/trpc";
+import NavBar from "../../components/NavBar";
+import ExploreView from "../../components/ExploreView";
 
 import { SiAddthis } from "react-icons/si";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { LoadingPage } from "../components/loading";
+import { LoadingPage } from "../../components/loading";
 
 const Explore = () => {
   const { data: session } = useSession();

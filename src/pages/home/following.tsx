@@ -3,15 +3,15 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { trpc } from "../utils/trpc";
-import NavBar from "../components/NavBar";
-import ExploreView from "../components/ExploreView";
+import { trpc } from "../../utils/trpc";
+import NavBar from "../../components/NavBar";
+import FollowingView from "../../components/FollowingView";
 
 import { SiAddthis } from "react-icons/si";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { LoadingPage } from "../components/loading";
+import { LoadingPage } from "../../components/loading";
 
-const Explore = () => {
+const Following = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const { data: user, isLoading: userIsLoading } = trpc.user.getUser.useQuery();
@@ -63,7 +63,7 @@ const Explore = () => {
         <section className="col-span-8">
           <div className="dropdown-end dropdown-arrow dropdown-hover dropdown dropdown-right">
             <div className="flex items-center">
-              <h1 className="py-5 pl-5 text-4xl font-bold">Feed - Explore</h1>
+              <h1 className="py-5 pl-5 text-4xl font-bold">Feed - Following</h1>
               <label tabIndex={0} className="btn-ghost btn-circle btn">
                 <RxHamburgerMenu className="text-2xl" />
               </label>
@@ -80,11 +80,11 @@ const Explore = () => {
               </li>
             </ul>
           </div>
-          <ExploreView />
+          <FollowingView />
         </section>
       </div>
     </div>
   );
 };
 
-export default Explore;
+export default Following;

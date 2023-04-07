@@ -8,7 +8,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
 const ExploreView = () => {
-  const { data, isLoading } = trpc.home.explore.useQuery();
+  const { data, isLoading } = trpc.home.following.useQuery();
 
   if (isLoading) return <LoadingPage />;
 

@@ -43,4 +43,39 @@ export const homeRouter = router({
 
     return logs;
   }),
+
+  following: protectedProcedure.query(async ({ ctx }) => {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: ctx.session.user.id,
+      },
+      include: {
+        following: true,
+      },
+    });
+
+    if (!user) throw new TRPCError({ code: "NOT_FOUND" });
+
+    const logs = await prisma.log.findMany({
+      take: 100,
+      include: {
+        log_tags: {
+          include: {
+            tag: true,
+          },
+        },
+        user: true,
+      },
+      where: {
+        user_id: {
+          in: user.following.map((follow) => follow.followed_user_id),
+        },
+      },
+      orderBy: {
+        created_at: "desc",
+      },
+    });
+
+    return logs;
+  }),
 });
