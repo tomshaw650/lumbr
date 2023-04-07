@@ -122,7 +122,7 @@ const Log = (props: { log: Log }) => {
         </title>
         <meta
           property="og:image"
-          content={`https://lumbr.dev/api/og?title=${props.log.title}&username=${props.log.user.username}&desc=${props.log.description}&pfp=${props.log.user.image}`}
+          content={`https://www.lumbr.dev/api/og?title=${props.log.title}&username=${props.log.user.username}&desc=${props.log.description}&pfp=${props.log.user.image}`}
         />
       </Head>
       <NavBar user={data} />
