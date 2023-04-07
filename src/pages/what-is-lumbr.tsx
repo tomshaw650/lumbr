@@ -30,9 +30,10 @@ const WhatIsLumbr = () => {
         <p className="mb-4">
           The basis is to improve and enrich developer interactions on the
           internet. I&apos;ve felt for a while that developers are missing a
-          "home" online, and merely settled across a few different spaces that
-          don&apos;t quite fit. I want to create a space that is tailored to
-          developers, and is a place where they can feel at home.
+          <span className="italic">home</span> online, and merely settled across
+          a few different spaces that don&apos;t quite fit. I want to create a
+          space that is tailored to developers, and is a place where they can
+          feel at home.
         </p>
         <h2 className="mb-4 text-2xl">So what do I do here?</h2>
         <p className="mb-4">
