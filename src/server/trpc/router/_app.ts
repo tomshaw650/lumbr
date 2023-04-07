@@ -7,6 +7,7 @@ import { profileRouter } from "./profile";
 import { logRouter } from "./log";
 import { postRouter } from "./post";
 import { commentRouter } from "./comment";
+import { searchRouter } from "./search";
 
 export const appRouter = router({
   auth: authRouter,
@@ -17,6 +18,7 @@ export const appRouter = router({
   log: logRouter,
   post: postRouter,
   comment: commentRouter,
+  search: searchRouter,
 });
 
 // export type definition of API

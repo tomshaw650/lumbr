@@ -29,7 +29,7 @@ const WhatIsLumbr = () => {
       <h1 className="mb-8 text-4xl">What is Lumbr?</h1>
       <div className="max-w-2xl">
         <p className="mb-4">
-          Lumbr is a project by me, Tom Shaw, to act as my project deliverable
+          Lumbr is a project by me, Tom Shaw, to act as the project deliverable
           of my Bachelor&apos;s Degree dissertation.
         </p>
         <p className="mb-4">
@@ -53,8 +53,8 @@ const WhatIsLumbr = () => {
         <p className="mb-4">
           I really hope you enjoy your stay here, and that you&apos;ll give it a
           try. This ultimately acts as a prototype and is not finished, but
-          I&apos;m proud of what I made. I hope to read some logs other than
-          mine!
+          I&apos;m proud of what I made. I hope to read some logs other than my
+          own!
         </p>
         <p className="mb-4">Sound good?</p>
         <button

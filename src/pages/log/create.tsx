@@ -6,7 +6,6 @@ import { trpc } from "../../utils/trpc";
 import { Formik, Form, Field } from "formik";
 import { toast } from "react-hot-toast";
 import { LoadingPage } from "../../components/loading";
-import { toASCII } from "punycode";
 
 interface inputValues {
   title: string;

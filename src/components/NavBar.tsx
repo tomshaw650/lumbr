@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import type { User } from "next-auth";
@@ -14,6 +15,15 @@ interface Props {
 }
 
 const NavBar: React.FC<Props> = React.memo(({ user }) => {
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+
+  function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Enter") {
+      router.push(`/search/${encodeURIComponent(query)}`);
+    }
+  }
+
   return (
     <nav className="navbar flex border-b-2 border-neutral border-opacity-20 py-3">
       <ul className="w-full">
@@ -33,6 +43,9 @@ const NavBar: React.FC<Props> = React.memo(({ user }) => {
             type="text"
             placeholder="Search..."
             className="input-bordered input ml-2 bg-white sm:w-full"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyPress={handleKeyPress}
           />
         </li>
         <ul className="flex md:ml-20">
