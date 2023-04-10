@@ -343,7 +343,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
 
       <NavBar user={navUser} />
       <div className="grid grid-cols-1 sm:grid-cols-10">
-        <section className="sticky col-span-2 flex h-screen flex-col border-r-2 border-neutral border-opacity-50">
+        <section className="sticky col-span-2 flex flex-col border-r-2 border-neutral border-opacity-50 sm:h-screen">
           <div className="mt-16 p-2">
             <Image
               priority={true}
