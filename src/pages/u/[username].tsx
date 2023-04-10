@@ -36,7 +36,7 @@ const EditProfileModal = (user: any) => {
   const edit = trpc.profile.edit.useMutation({
     onSuccess: () => {
       if (isSuccess) {
-        router.reload();
+        router.push("/home");
       }
     },
   });
@@ -54,7 +54,6 @@ const EditProfileModal = (user: any) => {
           firstName: name?.[0],
           lastName: name?.[1],
           username: user.user.username,
-          image: user.user.image,
           bio: user.user.bio,
           interests: interests.map((tag) => tag.tag_id) || [],
         }}
@@ -103,7 +102,6 @@ const EditProfileModal = (user: any) => {
               name: values.firstName + " " + values.lastName,
               username: values.username,
               bio: values.bio,
-              image: values.image,
             })
             .then(() => {
               if (tagsToAdd) {
@@ -156,21 +154,6 @@ const EditProfileModal = (user: any) => {
                 name="username"
                 type="text"
                 placeholder="Username"
-                className="input-bordered input mb-4 bg-white"
-              />
-              <label className="label" htmlFor="image">
-                <span className="label-text">Upload a profile picture</span>
-                <span
-                  className="text-md label-text-alt tooltip tooltip-primary"
-                  data-tip="Profile picture must be a valid image URL."
-                >
-                  (?)
-                </span>
-              </label>
-              <Field
-                name="image"
-                type="text"
-                placeholder="Image URL"
                 className="input-bordered input mb-4 bg-white"
               />
               <label className="label" htmlFor="bio">
@@ -348,7 +331,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
             <Image
               priority={true}
               src={user.image ? user.image : "/user.png"}
-              alt="Commenter's Profile Picture"
+              alt="Profile Picture"
               width="220"
               height="220"
               className="mx-auto rounded-full border-4 border-black"

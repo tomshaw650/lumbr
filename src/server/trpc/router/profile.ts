@@ -29,7 +29,6 @@ export const profileRouter = router({
         bio: z
           .string()
           .max(60, { message: "Bio must be shorter than 60 characters." }),
-        image: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -49,7 +48,6 @@ export const profileRouter = router({
           username: input.username,
           name: input.name,
           bio: input.bio,
-          image: input.image,
         },
       });
       return user;

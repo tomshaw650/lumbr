@@ -36,10 +36,12 @@ const CommentComponent = ({ comment }: { comment: Comment }) => {
           {showConfirm ? (
             <div>
               <p>Are you sure you want to delete this comment?</p>
-              <button className="mr-3" onClick={confirmDelete}>
+              <button className="btn-success btn mr-3" onClick={confirmDelete}>
                 Yes
               </button>
-              <button onClick={cancelDelete}>No</button>
+              <button className="btn-error btn" onClick={cancelDelete}>
+                No
+              </button>
             </div>
           ) : (
             <button
