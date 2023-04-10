@@ -56,15 +56,6 @@ const LogIn = () => {
         >
           Login with GitHub
         </button>
-        <p className="my-5 text-xl font-bold">--- or ---</p>
-        <button
-          onClick={() => {
-            signIn("google").catch(console.log);
-          }}
-          className="btn-primary btn-lg btn text-white"
-        >
-          Login with Google
-        </button>
       </div>
     </div>
   );
