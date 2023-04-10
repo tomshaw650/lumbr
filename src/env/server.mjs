@@ -4,14 +4,19 @@
  * It has to be a `.mjs`-file to be imported there.
  */
 import { serverSchema } from "./schema.mjs";
+import address from "address";
 import { env as clientEnv, formatErrors } from "./client.mjs";
 
 const _serverEnv = serverSchema.safeParse(process.env);
 
+if (process.env.NODE_ENV === "development") {
+  console.log("info  - lanUrl:", `http://${address.ip()}:3000`);
+}
+
 if (!_serverEnv.success) {
   console.error(
     "❌ Invalid environment variables:\n",
-    ...formatErrors(_serverEnv.error.format()),
+    ...formatErrors(_serverEnv.error.format())
   );
   throw new Error("Invalid environment variables");
 }

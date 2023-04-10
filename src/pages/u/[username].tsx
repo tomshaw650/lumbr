@@ -342,7 +342,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
       </Head>
 
       <NavBar user={navUser} />
-      <div className="grid grid-cols-10">
+      <div className="grid grid-cols-1 sm:grid-cols-10">
         <section className="sticky col-span-2 flex h-screen flex-col border-r-2 border-neutral border-opacity-50">
           <div className="mt-16 p-2">
             <Image

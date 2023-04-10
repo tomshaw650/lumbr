@@ -30,7 +30,7 @@ const CommentComponent = ({ comment }: { comment: Comment }) => {
   };
 
   return (
-    <div className="card mb-5 w-96 bg-white p-5">
+    <div className="card mb-5 w-72 bg-white p-5 sm:w-96">
       {isAuthed && (
         <>
           {showConfirm ? (
@@ -72,7 +72,7 @@ const CommentComponent = ({ comment }: { comment: Comment }) => {
           {comment.user.username} <span className="font-light">said:</span>
         </p>
       </div>
-      <p className="mt-4">{comment.body}</p>
+      <p className="mt-4 break-words">{comment.body}</p>
     </div>
   );
 };

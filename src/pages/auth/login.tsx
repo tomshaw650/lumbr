@@ -35,19 +35,19 @@ const LogIn = () => {
             <Image src="/lumbr.png" alt="Lumbr logo" width="100" height="100" />
           </Link>
         </div>
-        <div className="navbar-end flex-1 md:mr-10">
+        <div className="navbar-end mr-10 flex-1">
           <SwitchTheme />
         </div>
       </nav>
-      <header className="flex flex-col place-items-center">
+      <header className="mt-10 flex flex-col place-items-center">
         <h1 className="text-5xl font-bold">Get Started!</h1>
-        <ul className="steps steps-vertical lg:mt-10 lg:steps-horizontal">
+      </header>
+      <div className="flex flex-col items-center justify-around">
+        <ul className="steps steps-vertical ml-4 sm:mt-10">
           <li className="step-primary step font-bold" />
           <li className="step font-bold" />
           <li className="step font-bold" data-content="✓" />
         </ul>
-      </header>
-      <div className="flex flex-col items-center justify-around">
         <button
           onClick={() => {
             signIn("github").catch(console.log);

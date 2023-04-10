@@ -138,7 +138,7 @@ const Log = (props: { log: Log }) => {
           );
         })}
       </div>
-      <div className="mx-auto mt-10 flex max-w-md flex-col items-center rounded-md border-2 border-black border-opacity-20 py-2">
+      <div className="mx-auto mt-10 flex w-72 flex-col items-center rounded-md border-2 border-black border-opacity-20 py-2 sm:w-96">
         <h1 className="text-2xl font-bold">{props.log.title}</h1>
         <p className="text-sm text-gray-500">
           by{" "}
@@ -223,7 +223,7 @@ const Log = (props: { log: Log }) => {
         {props.log.posts.map((post) => (
           <Link
             key={post.post_id}
-            className="w-full max-w-md md:max-w-lg"
+            className="w-72 max-w-md sm:w-96 md:max-w-lg"
             href={`/post/${post.post_id}`}
           >
             <div className="mt-5 rounded-md border-2 border-black border-opacity-20 bg-white p-5 hover:shadow-md dark:hover:drop-shadow-[0_4px_3px_rgba(255,255,255,0.2)]">

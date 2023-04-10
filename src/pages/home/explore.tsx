@@ -38,16 +38,14 @@ const Explore = () => {
         <title>Lumbr | Explore</title>
       </Head>
       <NavBar user={user} />
-      <div className="grid grid-cols-10">
-        <section className="sticky col-span-2 flex h-screen flex-col border-r-2 border-neutral border-opacity-50">
-          <h1 className="p-5 text-4xl font-bold">Your logs</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-10">
+        <section className="flex flex-col sm:col-span-2 sm:h-screen sm:border-r-2 sm:border-neutral sm:border-opacity-50">
+          <h1 className="p-5 text-center text-4xl font-bold">Your logs</h1>
           <Link
             className="flex items-center gap-x-2 pl-5 hover:text-primary"
             href="/log/create"
           >
-            <span className="hidden text-xl underline sm:block">
-              Create a log
-            </span>
+            <span className="text-xl underline">Create a log</span>
             <SiAddthis className="text-xl" />
           </Link>
           <ul className="flex list-disc flex-col gap-y-2 p-10">
@@ -60,10 +58,12 @@ const Explore = () => {
             ))}
           </ul>
         </section>
-        <section className="col-span-8">
-          <div className="dropdown-end dropdown-arrow dropdown-hover dropdown dropdown-right">
+        <section className="sm:col-span-8">
+          <div className="dropdown-arrow dropdown-hover dropdown-end dropdown dropdown-bottom">
             <div className="flex items-center">
-              <h1 className="py-5 pl-5 text-4xl font-bold">Feed - Explore</h1>
+              <h1 className="py-5 pl-5 text-center text-2xl font-bold sm:text-4xl">
+                Feed - Explore
+              </h1>
               <label tabIndex={0} className="btn-ghost btn-circle btn">
                 <RxHamburgerMenu className="text-2xl" />
               </label>

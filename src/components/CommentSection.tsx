@@ -60,7 +60,7 @@ const CommentSection: React.FC = () => {
           {({ isSubmitting, errors }) => (
             <Form className="form-control flex flex-col items-center">
               <Field
-                className="textarea-bordered textarea textarea-lg mb-2 resize-none bg-white"
+                className="textarea-bordered textarea textarea-lg mb-2 w-72 resize-none bg-white sm:w-96"
                 name="body"
                 as="textarea"
                 placeholder="Write your comment here..."

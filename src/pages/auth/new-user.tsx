@@ -52,7 +52,7 @@ const NewUser: NextPage = () => {
   const name = user?.data?.name?.split(" ");
 
   return (
-    <div className="fixed flex w-full flex-col">
+    <div className="flex w-full flex-col">
       <Head>
         <title>Lumbr | Account Setup</title>
       </Head>
@@ -62,13 +62,13 @@ const NewUser: NextPage = () => {
             <Image src="/lumbr.png" alt="Lumbr logo" width="100" height="100" />
           </Link>
         </div>
-        <div className="navbar-end flex-1 md:mr-10">
+        <div className="navbar-end mr-10 flex-1">
           <SwitchTheme />
         </div>
       </nav>
       <header className="flex flex-col place-items-center">
-        <h1 className="text-5xl font-bold">Almost there...</h1>
-        <ul className="steps steps-vertical lg:mt-10 lg:steps-horizontal">
+        <h1 className="text-4xl font-bold sm:text-5xl">Almost there...</h1>
+        <ul className="steps steps-vertical lg:mt-10">
           <li className="step-primary step font-bold" />
           <li className="step-primary step font-bold" />
           <li className="step font-bold" data-content="✓" />

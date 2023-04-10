@@ -37,7 +37,7 @@ const ExploreView = () => {
           >
             <div
               key={log.log_id}
-              className="flex flex-col rounded border-2 border-solid border-primary p-2"
+              className="flex w-60 flex-col rounded border-2 border-solid border-primary p-2 sm:w-96"
             >
               <span className="text-xl font-bold">{log.title}</span>
               <span className="font-semibold">{log.description}</span>

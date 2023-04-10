@@ -13,7 +13,7 @@ const FourOhFour = () => {
     <>
       <nav className="navbar flex">
         <div className="flex-none">
-          <Link href="/" className="btn-ghost btn-circle btn ml-10">
+          <Link href="/" className="btn-ghost btn-circle btn">
             <Image src="/lumbr.png" alt="Lumbr logo" width="100" height="100" />
           </Link>
         </div>

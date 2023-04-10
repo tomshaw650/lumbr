@@ -144,9 +144,9 @@ const Admin = () => {
       <NavBar user={user} />
       <div className="flex flex-col place-items-center">
         <h1 className="mt-10 text-3xl font-bold">Admin Dashboard</h1>
-        <div className="pt-10">
+        <div className="mt-10">
           <h2 className="text-2xl">View Reports</h2>
-          <div className="my-2 w-[32rem] border border-base-300 bg-white">
+          <div className="my-2 w-72 border border-base-300 bg-white">
             {reports.length > 0 ? (
               reports.map((report, index) => (
                 <section

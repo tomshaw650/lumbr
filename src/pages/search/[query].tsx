@@ -84,8 +84,8 @@ const SearchPage: NextPage<{ query: string }> = ({ query }) => {
   return (
     <div className="w-screen">
       <NavBar user={user} />
-      <div className="grid grid-cols-10">
-        <section className="col-span-7">
+      <div className="grid grid-cols-1 sm:grid-cols-10">
+        <section className="order-2 sm:order-1 sm:col-span-7">
           <h1 className="p-10 text-3xl font-bold">
             {resultsLength} results for &apos;{query}&apos;
           </h1>
@@ -94,9 +94,9 @@ const SearchPage: NextPage<{ query: string }> = ({ query }) => {
           {category === "posts" && <PostView posts={posts} />}
           {category === "comments" && <CommentView comments={comments} />}
         </section>
-        <section className="sticky col-span-3 flex h-screen flex-col">
-          <ul className="menu rounded-box mt-10 bg-white md:max-w-sm">
-            <li className="p-2 text-lg">
+        <section className="order-1 flex flex-col sm:order-2 sm:col-span-3">
+          <ul className="menu rounded-box menu-horizontal mx-auto mt-10 w-72 place-content-center bg-white py-2 sm:py-0 sm:menu-vertical">
+            <li className="text-sm sm:p-2 sm:text-lg">
               <button
                 className={`flex cursor-pointer justify-between ${
                   category === "users" ? "active" : ""
@@ -107,7 +107,7 @@ const SearchPage: NextPage<{ query: string }> = ({ query }) => {
                 <span className="font-bold">({users.length})</span>
               </button>
             </li>
-            <li className="p-2 text-lg">
+            <li className="text-sm sm:p-2 sm:text-lg">
               <button
                 className={`flex cursor-pointer justify-between ${
                   category === "logs" ? "active" : ""
@@ -118,7 +118,7 @@ const SearchPage: NextPage<{ query: string }> = ({ query }) => {
                 <span className="font-bold">({logs.length})</span>
               </button>
             </li>
-            <li className="p-2 text-lg">
+            <li className="text-sm sm:p-2 sm:text-lg">
               <button
                 className={`flex cursor-pointer justify-between ${
                   category === "posts" ? "active" : ""
@@ -129,7 +129,7 @@ const SearchPage: NextPage<{ query: string }> = ({ query }) => {
                 <span className="font-bold">({posts.length})</span>
               </button>
             </li>
-            <li className="p-2 text-lg">
+            <li className="text-sm sm:p-2 sm:text-lg">
               <button
                 className={`flex cursor-pointer justify-between ${
                   category === "comments" ? "active" : ""

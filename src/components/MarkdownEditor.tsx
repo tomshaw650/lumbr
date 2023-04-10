@@ -17,6 +17,7 @@ const MarkdownEditor = ({
   fieldOnChange,
 }: MarkdownEditorProps) => {
   const [markdown, setMarkdown] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
 
   const handleMarkdownChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -26,18 +27,27 @@ const MarkdownEditor = ({
     fieldOnChange(event);
   };
 
+  const handlePreviewToggle = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setShowPreview(!showPreview);
+  };
+
   return (
-    <div className="flex h-screen bg-gray-100">
-      <div className="flex w-1/2 flex-col p-4">
+    <div className="flex h-screen flex-col bg-gray-100">
+      <div className={`flex-1 ${showPreview ? "hidden md:block" : "block"}`}>
         <textarea
           name={name}
-          className="flex-1 resize-none rounded-lg border border-gray-300 bg-white p-2 focus:outline-none"
+          className="h-full w-full resize-none rounded-lg border border-gray-300 bg-white p-2 focus:outline-none"
           placeholder="Start typing in Markdown..."
           value={markdown}
           onChange={handleMarkdownChange}
         />
       </div>
-      <div className="w-1/2 overflow-y-scroll whitespace-normal bg-white">
+      <div
+        className={`flex-1 bg-white md:block md:flex-none ${
+          showPreview ? "block" : "hidden md:block"
+        }`}
+      >
         <div className="prose-sm p-4 sm:prose md:prose-lg lg:prose-xl">
           <ReactMarkdown
             children={markdown}
@@ -61,6 +71,14 @@ const MarkdownEditor = ({
             }}
           />
         </div>
+      </div>
+      <div className="md:hidden">
+        <button
+          onClick={handlePreviewToggle}
+          className="fixed bottom-4 right-4 rounded-md bg-gray-500 p-2 text-white"
+        >
+          {showPreview ? "Edit" : "Preview"}
+        </button>
       </div>
     </div>
   );

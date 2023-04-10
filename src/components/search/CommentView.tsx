@@ -7,7 +7,7 @@ dayjs.extend(relativeTime);
 
 const CommentView = (comments: any) => {
   return (
-    <div className="pl-10">
+    <div className="mx-auto w-72 sm:mx-0 sm:w-96 sm:pl-10">
       {comments.comments.length === 0 && (
         <div className="mt-10 text-center text-2xl">No comments found</div>
       )}
@@ -35,7 +35,7 @@ const CommentView = (comments: any) => {
           />
           <div className="flex flex-col">
             <span className="text-xl">Comment by {comment.user.username}</span>
-            <span className="italic">&quot;{comment.body}&quot;</span>
+            <span className="break-all italic">&quot;{comment.body}&quot;</span>
             <span className="text-md">{`Created ${dayjs(
               comment.created_at
             ).fromNow()}`}</span>

@@ -24,13 +24,18 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <Head>
         <title>Lumbr</title>
         <meta name="description" content="A place for developers to connect" />
+        <meta
+          name="viewport"
+          content="width=device-width, minimum-scale=1, initial-scale=1"
+        />
+        <meta charSet="utf-8" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={sofia_sans.className}>
+      <div className={sofia_sans.className}>
         <Toaster position="bottom-center" />
         <Component {...pageProps} />
         <Analytics />
-      </main>
+      </div>
     </SessionProvider>
   );
 };

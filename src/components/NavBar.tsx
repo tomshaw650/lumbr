@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { User } from "next-auth";
 import type { User as PrismaUser } from "@prisma/client";
+import { RxMagnifyingGlass } from "react-icons/rx";
 import { signOut } from "next-auth/react";
 import dynamic from "next/dynamic";
 const SwitchTheme = dynamic(() => import("../components/SwitchTheme"), {
@@ -39,10 +40,25 @@ const NavBar: React.FC<Props> = React.memo(({ user }) => {
           </Link>
         </li>
         <li>
+          <div className="dropdown dropdown-bottom sm:hidden">
+            <RxMagnifyingGlass
+              tabIndex={0}
+              className="btn-ghost btn-sm btn-circle btn ml-2 text-4xl"
+            />
+            <input
+              tabIndex={0}
+              type="text"
+              placeholder="Search..."
+              className="dropdown-content input-bordered input bg-white"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
+          </div>
           <input
             type="text"
             placeholder="Search..."
-            className="input-bordered input ml-2 bg-white sm:w-full"
+            className="input-bordered input ml-2 hidden bg-white sm:block sm:w-full"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyPress={handleKeyPress}
