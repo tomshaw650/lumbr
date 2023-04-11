@@ -11,9 +11,12 @@ interface Props {
 const BackLink: React.FC<Props> = React.memo(({ href, text, current }) => {
   return (
     <Link href={href}>
-      <div className="flex max-w-sm items-center">
-        <p className="text-md text-primary underline hover:font-bold">
+      <div className="flex max-w-sm items-center sm:max-w-md">
+        <p className="text-md text-primary underline hover:font-bold sm:hidden">
           {text.length > 5 && !current ? "..." : text}
+        </p>
+        <p className="text-md hidden text-primary underline hover:font-bold sm:block">
+          {text}
         </p>
         {current ? null : <IoIosArrowForward />}
       </div>

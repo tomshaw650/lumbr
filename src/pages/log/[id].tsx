@@ -16,6 +16,7 @@ import CommentSection from "../../components/CommentSection";
 import LikeLogButton from "../../components/LikeLogButton";
 import UsersLikedLogModal from "../../components/UsersLikedLogModal";
 import AddTagsModal from "../../components/AddTagsModal";
+import DeleteLogModal from "../../components/DeleteLogModal";
 import { LoadingPage } from "../../components/loading";
 import FourOhFour from "../404";
 
@@ -209,8 +210,29 @@ const Log = (props: { log: Log }) => {
             </div>
           </>
         )}
+        {session && data?.username === props.log.user.username && (
+          <>
+            <label
+              htmlFor="delete"
+              className="btn mt-2 bg-red-600 text-white hover:bg-red-700"
+            >
+              Delete
+            </label>
+            <input type="checkbox" id="delete" className="modal-toggle" />
+            <div className="modal">
+              <div className="modal-box">
+                <h3 className="text-lg font-bold">Delete {props.log.title}?</h3>
+                <DeleteLogModal logId={props.log.log_id} />
+                <div className="modal-action">
+                  <label htmlFor="delete" className="btn-circle btn">
+                    X
+                  </label>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
-
       <div className="divider mt-5" />
       {data?.username === props.log.user.username && (
         <div className="flex justify-center">

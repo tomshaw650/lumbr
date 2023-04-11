@@ -129,4 +129,39 @@ export const postRouter = router({
       });
       return !!like;
     }),
+
+  delete: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const post = await prisma.post.findUnique({
+        where: {
+          post_id: input.postId,
+        },
+      });
+
+      if (!post) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Post not found.`,
+        });
+      }
+
+      if (post.user_id !== ctx?.session?.user?.id) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `You are not the owner of this Post.`,
+        });
+      }
+
+      await prisma.post.delete({
+        where: {
+          post_id: input.postId,
+        },
+      });
+      return true;
+    }),
 });

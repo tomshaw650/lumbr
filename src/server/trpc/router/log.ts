@@ -260,4 +260,39 @@ export const logRouter = router({
       });
       return report;
     }),
+
+  delete: protectedProcedure
+    .input(
+      z.object({
+        logId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const log = await prisma.log.findUnique({
+        where: {
+          log_id: input.logId,
+        },
+      });
+
+      if (!log) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Log not found.`,
+        });
+      }
+
+      if (log.user_id !== ctx?.session?.user?.id) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `You are not the owner of this log.`,
+        });
+      }
+
+      await prisma.log.delete({
+        where: {
+          log_id: input.logId,
+        },
+      });
+      return true;
+    }),
 });

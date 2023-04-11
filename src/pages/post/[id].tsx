@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { prisma } from "../../server/db/client";
 import { trpc } from "../../utils/trpc";
 import type { Post } from "../../types/prisma";
@@ -15,9 +16,11 @@ import formatDate from "../../utils/formatDate";
 import CommentSection from "../../components/CommentSection";
 import LikePostButton from "../../components/LikePostButton";
 import UsersLikedPostModal from "../../components/UsersLikedPostModal";
+import DeletePostModal from "../../components/DeletePostModal";
 import { LoadingPage } from "../../components/loading";
 
 const Post = (props: { post: Post }) => {
+  const { data: session } = useSession();
   const [likeCount, setLikeCount] = useState(0);
   const { data, isLoading } = trpc.user.getUserPublic.useQuery();
   const allLikes = trpc.post.getAllLikes.useQuery({
@@ -85,8 +88,32 @@ const Post = (props: { post: Post }) => {
           </Link>
         </p>
         <p>{formatDate(props.post.created_at)}</p>
+        {session && data?.username === props.post.user.username && (
+          <>
+            <label
+              htmlFor="delete"
+              className="btn mt-2 bg-red-600 text-white hover:bg-red-700"
+            >
+              Delete
+            </label>
+            <input type="checkbox" id="delete" className="modal-toggle" />
+            <div className="modal">
+              <div className="modal-box">
+                <h3 className="text-lg font-bold">
+                  Delete {props.post.title}?
+                </h3>
+                <DeletePostModal postId={props.post.post_id} />
+                <div className="modal-action">
+                  <label htmlFor="delete" className="btn-circle btn">
+                    X
+                  </label>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
-      <div className="prose-sm mx-auto mt-5 flex w-72 flex-col rounded-md border-2 border-black border-opacity-20 bg-white p-5 hover:prose-a:text-primary dark:bg-inherit sm:w-96 sm:max-w-4xl sm:prose md:prose-lg lg:prose-xl">
+      <div className="prose-sm mx-auto mt-5 flex w-72 flex-col rounded-md border-2 border-black border-opacity-20 bg-white p-5 hover:prose-a:text-primary dark:bg-inherit sm:w-[52rem] sm:max-w-4xl sm:prose md:prose-lg lg:prose-xl">
         <ReactMarkdown
           children={props.post.content}
           components={{
