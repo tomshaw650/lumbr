@@ -33,8 +33,12 @@ const MarkdownEditor = ({
   };
 
   return (
-    <div className="flex h-screen flex-col bg-gray-100">
-      <div className={`flex-1 ${showPreview ? "hidden md:block" : "block"}`}>
+    <div className="flex h-screen flex-wrap bg-gray-100">
+      <div
+        className={`w-full md:w-1/2 ${
+          showPreview ? "hidden md:block" : "block"
+        }`}
+      >
         <textarea
           name={name}
           className="h-full w-full resize-none rounded-lg border border-gray-300 bg-white p-2 focus:outline-none"
@@ -44,7 +48,7 @@ const MarkdownEditor = ({
         />
       </div>
       <div
-        className={`flex-1 bg-white md:block md:flex-none ${
+        className={`w-full bg-white md:block md:w-1/2 md:flex-none ${
           showPreview ? "block" : "hidden md:block"
         }`}
       >
