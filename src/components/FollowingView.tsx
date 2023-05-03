@@ -33,7 +33,7 @@ const ExploreView = () => {
           </Link>
           <Link
             href={`/log/${log.log_id}`}
-            className="w-full max-w-xl hover:shadow-lg"
+            className="w-full max-w-sm hover:shadow-md"
           >
             <div
               key={log.log_id}

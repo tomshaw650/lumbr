@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const UserView = (users: any) => {
   return (
-    <div className="pl-10">
+    <div className="mx-auto w-72 sm:mx-0 sm:w-96 sm:pl-10">
       {users.users.length === 0 && (
         <div className="mt-10 text-center text-2xl">No users found</div>
       )}

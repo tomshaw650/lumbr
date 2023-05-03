@@ -7,7 +7,7 @@ dayjs.extend(relativeTime);
 
 const LogView = (logs: any) => {
   return (
-    <div className="pl-10">
+    <div className="mx-auto w-72 pl-10 sm:mx-0 sm:w-96 sm:pl-10">
       {logs.logs.length === 0 && (
         <div className="mt-10 text-center text-2xl">No logs found</div>
       )}
