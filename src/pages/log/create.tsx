@@ -34,7 +34,7 @@ const CreateLog: NextPage = () => {
       <Formik
         initialValues={{ title: "", description: "" }}
         onSubmit={async (values: inputValues, { setSubmitting }) => {
-          if (values.title.length < 2 || values.title.length > 20) {
+          if (values.title.length < 2 || values.title.length > 30) {
             toast.error("Log title must be between 2-20 characters");
             return;
           }
