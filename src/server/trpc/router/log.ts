@@ -10,7 +10,7 @@ export const logRouter = router({
         title: z
           .string()
           .min(2, { message: "Title must be 2 characters or more." })
-          .max(20, { message: "Title must be shorter than 20 characters." }),
+          .max(30, { message: "Title must be shorter than 30 characters." }),
         description: z.string().max(60, {
           message: "Description must be shorter than 60 characters.",
         }),

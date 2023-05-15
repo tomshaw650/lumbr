@@ -35,7 +35,7 @@ const CreateLog: NextPage = () => {
         initialValues={{ title: "", description: "" }}
         onSubmit={async (values: inputValues, { setSubmitting }) => {
           if (values.title.length < 2 || values.title.length > 30) {
-            toast.error("Log title must be between 2-20 characters");
+            toast.error("Log title must be between 2-30 characters");
             return;
           }
           // check for trpcerror and set error
@@ -63,7 +63,7 @@ const CreateLog: NextPage = () => {
                 <span className="label-text">Enter the name of the Log</span>
                 <span
                   className="label-text-alt tooltip tooltip-primary text-lg"
-                  data-tip="Log title must be between 2-20 characters"
+                  data-tip="Log title must be between 2-30 characters"
                 >
                   (?)
                 </span>
